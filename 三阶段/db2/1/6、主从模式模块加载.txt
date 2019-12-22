@@ -1,0 +1,26 @@
+  mysql主从同步复制模式
+  异步复制模式
+  全同步复制模式
+  半同步复制模式
+MariaDB [(none)]> show variables like "have_dynamic_loading";    查询数据库是否动态加载模块
+MariaDB [(none)]> show variables like "rpl_semi_sync_%_enabled";  查看功能状态
+
+MariaDB [(none)]> select plugin_name, plugin_status from      查询是否已经安装了模块
+    -> information_schema.plugins where plugin_name like '%semi%';
+
+MariaDB [(none)]> install plugin rpl_semi_sync_master soname 'semisync_master.so';  --安装master模块
+   
+MariaDB [(none)]> install plugin rpl_semi_sync_slave soname 'semisync_slave.so';        --安装slave模块
+
+MariaDB [(none)]> show variables like "rpl_semi_sync_%_enabled";  查看模块功能状态
+
+MariaDB [(none)]> set global rpl_semi_sync_master_enabled=1;   打开master半同步
+
+MariaDB [(none)]> set global rpl_semi_sync_slave_enabled=1;      打开slave半同步
+
+[root@mysql50 ~]# vim /etc/my.cnf     ----写进配置
+plugin-load="rpl_semi_sync_master=semisync_master.so;rpl_semi_sync_slave=semisync_slave.so"  安装模块
+rpl-semi-sync-master-enabled = 1     ---打开master半同步
+rpl-semi-sync-slave-enabled = 1        ---打开slave半同步
+
+

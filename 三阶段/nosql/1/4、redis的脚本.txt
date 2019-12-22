@@ -1,0 +1,4 @@
+[root@node1 ~]#  vim /etc/init.d/redis_6379
+ 43             $CLIEXEC -p $REDISPORT shutdown    #修改为43             $CLIEXEC -h 192.168.1.50 -p 6350 -a 123456  shutdown
+
+此时可以用/etc/init.d/redis_6379 起服务 停服务

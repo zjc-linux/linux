@@ -1,0 +1,21 @@
+ 还原 51 52 53   50作客户端
+[root@node2-51 ~]# rm -rf /var/lib/redis/6379/*
+[root@node2-51 ~]# vim /etc/redis/6379.conf   还原cluster、
+默认所有的redis都是master 
+[root@node3-52 ~]# redis-cli -h 192.168.31.52 -p 6352   ---登陆
+192.168.31.52:6352> slaveof 192.168.31.51 6351  --配置52为51的从 命令行操作重启失效
+192.168.31.51:6351> info replication     查看redis主机身份
+         
+永久配置从库
+[root@node3-52 ~]# vim /etc/redis/6379.conf
+282 # slaveof <masterip> <masterport> 修改为 slaveof 192.168.31.51 6351
+192.168.31.52:6352> slaveof no one  临时把从库变为单个主库
+
+[root@node3-51 ~]# vim /etc/redis/6379.conf    51打开密码选项
+[root@node3-52 ~]# vim /etc/redis/6379.conf    此时52做永久从需要加入主库密码
+289 # masterauth <master-password>  修改为masterauth "123456"
+------------把53也配置为51 的从库
+192.168.31.54:6354> config set masterauth  "123456"  在数据库命令行修改配置文件选项 不实际修改临时修改
+主丛丛直接把52写进53的配置文件就可以
+------------------------------------------------------------------------------------------------------------------------
+做从库时候会覆盖做从库前的数据

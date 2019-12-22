@@ -1,0 +1,15 @@
+iptables 选项 链名称 -m 扩展模块 --具体扩展条件 -j 动作
+ -m ipreange --具体的ip范围
+ -m mac        --具体的mac地址   -j REJECT
+ -m time        --具体的时间         -j REJECT
+[root@node2-51 ~]# nmap -n -sP 192.168.43.50   用nmap查询50的mac地址
+
+[root@node2-51 ~]# iptables -I INPUT -m mac --mac 00:0C:29:43:36:62 -p tcp --dport 22 -j REJECT  拒绝 mac地址 访问22 
+
+[root@node2-51 ~]# iptables -I INPUT -p tcp -m multiport --dports 1,2,3,80,50,100:500 -j ACCEPT  拒绝多个端口
+                                                                                               1,2,3    100:500   ##100到500
+
+[root@node2-51 ~]# iptables -I INPUT -p tcp --dport 22 -m iprange --src-range 192.168.43.1-192.168.43.100 -j REJECT
+                                                                                                  拒绝某一个网段访问 22 端口
+
+

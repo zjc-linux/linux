@@ -1,0 +1,31 @@
+系统审计:要知道系统用户什么人做了什么事情
+[root@room ~]# yum -y install audit
+[root@room ~]# systemctl status auditd   服务名 超级管理员也不能停止服务
+[root@room ~]# vim /etc/audit/auditd.conf   配置文件
+log_file = /var/log/audit/audit.log      日志存放位置
+ 
+[root@room ~]# auditctl -s      查看状态
+[root@room ~]# auditctl -l       查看规则
+[root@room ~]# auditctl -D      删除所有规则
+
+[root@room ~]# auditctl -w /etc/ssh/sshd_config -p rwxa -k ssh_change             ----|
+                                     -w 文件/程序/目录       -p  权限 a为属性改变   -k 规则名字        |
+                                                                                                                                  |-------临时规则
+[root@room ~]# auditctl -w /usr/sbin/fdisk      -p x       -k parted                        -----|
+                                     -w 程序绝对路径  -p 被执行      -k 别名
+写永久审计规则
+[root@room ~]# auditctl -l
+-w /etc/ssh/sshd_config -p rwxa -k ssh_chage    ---| ---复制这两条规则
+-w /usr/sbin/fdisk -p x -k parted                        ---|
+
+[root@room ~]# vim /etc/audit/audit.rules   永久规则配置文件
+......粘贴到最后一行
+-w /etc/ssh/sshd_config -p rwxa -k ssh_chage
+-w /usr/sbin/fdisk -p x -k parted
+
+[root@room ~]# ausearch -k ssh_chage  -i
+                   查看审计日志  -k  规则名字     -i(便于阅读的方式)
+
+
+
+

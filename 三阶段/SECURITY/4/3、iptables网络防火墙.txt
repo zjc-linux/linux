@@ -1,0 +1,15 @@
+client ens33:192.168.43.50   
+        网关 192.168.43.51
+
+proxy   ens33:192.168.43.51
+           ens37:192.168.171.141
+
+web1  ens33:192.168.171.140
+          网关 192.168.171.141
+
+proxy 需要打开路由转发功能  此时可以在client上访问web1 	
+
+[root@node2-51 ~]# iptables -I FORWARD -s 192.168.43.50 -p tcp --dport 80 -j REJECT ---此时可以ping 不可以访问80
+                                                  路由转发      源地址                tcp       80       丢弃告知
+
+[root@node2-51 ~]# iptables -I INPUT -p icmp --icmp-type echo-request -j REJECT  实现我可以ping别人 别人不可以ping 我

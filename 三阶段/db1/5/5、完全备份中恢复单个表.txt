@@ -1,0 +1,22 @@
+[root@mysql50 ~]# innobackupex --user root --password 123456 
+                               --databases="db5" /db5bak --no-timestamp   ---对db5库进行完全备份
+
+MariaDB [db5]> desc db5.b;
+MariaDB [db5]> drop table db5.b;   ---删除db5库中的b表
+
+[root@mysql50 ~]# ls /var/lib/mysql/db5/b.* ---没有了对应的表文件
+
+MariaDB [db5]> create table db5.b(name char(10));    ---创建表结构
+ 
+MariaDB [db5]> alter table db5.b discard tablespace;  ---删除表空间文件
+
+[root@mysql50 ~]# innobackupex --user root --password 123456 --apply-log --export /db5bak ---导出表信息
+
+[root@mysql50 ~]# cd /db5bak/db5/
+[root@mysql50 ~]# cp b.{cfg,exp,ibd} /var/lib/mysql/db5/
+[root@mysql50 ~]# chown mysql.mysql /var/lib/mysql/db5/*
+
+MariaDB [db5]> alter table db5.b import tablespace;
+MariaDB [db5]> select * from db5.b;
+MariaDB [db5]> rm -rf /var/lib/mysql/db5/b.cfg
+MariaDB [db5]> rm -rf /var/lib/mysql/db5/b.exp

@@ -1,0 +1,12 @@
+[useradm@zabbixserver ~]$ sudo yum -y install php-gd php-xml
+[useradm@zabbixserver lnmp_soft]$sudo yum -y install php-bcmath-5.4.16-42.el7.x86_64.rpm 光盘没有
+[useradm@zabbixserver lnmp_soft]$ sudo yum -y install php-mbstring-5.4.16-42.el7.x86_64.rpm  光盘没有
+
+[useradm@zabbixserver ~]$ sudo vim /etc/php.ini  修改配置文件
+date.timezone = Asia/Shanghai      #设置时区
+max_execution_time = 300             #最大执行时间，秒
+post_max_size = 32M                     #post数据最大容量
+max_input_time = 300                    #服务器接收数据的时间限制
+memory_limit = 128M                    #内存容量限制
+[useradm@zabbixserver ~]$ sudo systemctl restart php-fpm  重启服务
+

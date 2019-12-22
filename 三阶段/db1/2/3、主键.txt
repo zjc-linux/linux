@@ -1,0 +1,32 @@
+mysql> create table t5(
+    -> name char(5),
+    -> class char(7),
+    -> stu_num char(9),
+    -> primary key(stu_num)   -----------|
+    -> );                                |
+                                         |
+mysql> create table t5(                  |----创建主键两种方式都可以
+    -> name char(5),                     |
+    -> class char(7),                    |
+    -> stu_num char(9) primary key   ----|
+    -> );
+---------------------------------------------------------------------------------------------------------------
+mysql> create table t6(
+    -> clientip char(15),
+    -> serport smallint unsigned,
+    -> status enum('allow','deny'),
+    -> primary key (clientip,serport)  ----------创建复合主键
+    -> );
+
+mysql> alter table t5 drop primary key; ---------可以删主键 复合主键
+mysql> alter table t6 add primary key(clientip,serport); --增加复合主键
+
+
+mysql> create table t7(
+    -> id int primary key auto_increment,    -------设置键值自增长
+    -> name char(10),
+    -> age tinyint
+    -> );
+
+mysql> alter table t7 modify id int not null;  ------先去自增长 ---|-必须先去自增长否则删不掉
+mysql> alter table t7 drop primary key;    ----------再删除主键 ---|

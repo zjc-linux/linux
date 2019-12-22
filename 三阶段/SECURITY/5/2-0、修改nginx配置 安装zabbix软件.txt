@@ -1,0 +1,30 @@
+修改nginx配置文件
+http{
+.....
+       fastcgi_buffers 8 16k;                   #缓存php生成的页面内容，8个16k
+       fastcgi_buffer_size 32k;                #缓存php生产的头部信息
+       fastcgi_connect_timeout 300;       #连接php的超时时间
+       fastcgi_send_timeout 300;            #发送请求的超时时间
+       fastcgi_read_timeout 300;            #读取请求的超时时间
+location~ \php${
+       root     html;
+       fastcgi_pass 127.0.0.1:9000;
+       fastcgi_index index.php;
+       include    fastcgi.conf;
+}
+安装依赖
+[useradm@zabbixserver ~]$ sudo yum -y install net-snmp-devel(可以让zabbix监控网络设备)   curl-devel(可以让zabbix调用curl)
+[useradm@zabbixserver lnmp_soft]$ sudo yum -y install libevent-devel-2.0.21-4.el7.x86_64.rpm(光盘不自带zabbix底层驱动)
+[useradm@zabbixserver lnmp_soft]$ tar -zxvf zabbix-3.4.4.tar.gz
+[useradm@zabbixserver zabbix-3.4.4]$ ./configure --enable-server --enable-proxy --enable-agent 
+--with-mysql=/usr/bin/mysql_config
+ --with-net-snmp --with-libcurl
+[useradm@zabbixserver zabbix-3.4.4]$ make && make install 
+
+# --enable-server   安装部署zabbix服务端软件 
+# --enable-proxy   安装部署zabbix代理相关软件
+# --enable-agent   安装部署zabbix被监控端软
+# --with-mysql=/usr/bin/mysql_config  配置mysql_config 路径
+# --with-net-snmp  允许zabbix通过snmp协议监控网络设备
+# --with-libcurl 安装相关curl库文件，这样zabbix就可以通过curl连接http
+

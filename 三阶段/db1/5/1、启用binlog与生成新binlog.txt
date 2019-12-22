@@ -1,0 +1,38 @@
+数据备份与恢复
+ 数据完全备份与恢复 mysqldump/mysql
+ 数据增量备份与恢复 binlog日志/innobackupex
+ 
+ 完全备份   ---备份所有数据
+ 增量备份   ---备份上次备份后，所有新产出的数据
+ 差异备份   ---备份完全备份后，所有新产生的数据
+
+[root@mysql13 ~]#  mysqldump -uroot -p123456 -A > /mydate/alldb.sql  ----对所有库进行完全备份
+[root@mysql13 ~]# mysqldump -uroot -p123456 db4 > /mydate/db4.sql    ----对db4库进行完全备份
+[root@mysql13 ~]# mysqldump -uroot -p123456 db4 t2 >  /mydate/db4_t4.sql   ---对db4库下t2表进行完全备份
+[root@mysql13 ~]# mysqldump -uroot -p123456 -B db3 db4 > /mydate/twodb.sql  ---对db3 db4库进行完全备份
+
+完全恢复数据 (删除对应的备份数据，然后使用备份文件恢复数据)
+[root@mysql13 ~]# mysql -uroot -p123456 db4 < /mydate/db4_t2.sql
+[root@mysql13 ~]# mysql -uroot -p123456 db4 < /mydate/db4.sql
+
+使用binlog日志进行增量备份  
+ 3种记录格式
+ ---1、statement:每一条修改数据的sql命令都会记录在binlog日志中
+ ---2、row:不记录sql语句上下文相关信息,仅保存那条记录修改
+ ---3、mixed:是以上两种格式的混合使用
+
+[root@mysql13 ~]# mkdir /logdir -----创建指定binlog日志存放为之把所有者组都修改为mysql
+[root@mysql13 ~]# vim /etc/my.cnf
+[mysqld]
+#log_bin            ----启动binlog日志 默认在/var/lib/mysql下
+log_bin=/logdir/zjc     ---指定binlog日志存放位置与名称
+server_id=13            ----指定ip
+binlog_format="mixed"   ----指定记录格式
+......
+[root@mysql13 ~]# mysqlbinlog /logdir/zjc.000001 | grep -i insert  ---查看binlog日志内容 过滤只看写入
+
+生成新的binlog日志
+
+1、默认达到500M会生成新的binlog日志文件   重启服务可以立即生成新的binlog日志文件  标号大的为正在使用的binlog
+2、[root@mysql13 logdir]# mysql -hlocalhost -uroot -p123456 -e "flush logs"   -e 为进数据库执行sql命令
+3、[root@mysql13 logdir]# mysqldump -uroot -p123456 --flush-logs db4 t2 > /mydate/db4_t2.txt 备份创建新binlog

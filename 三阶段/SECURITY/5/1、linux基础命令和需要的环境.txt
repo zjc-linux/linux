@@ -1,0 +1,19 @@
+系统监控命令
+ps               进程                     ifconfig                查看网卡
+uptime        cpu                     netstat或ss           查看有多少人连我  服务是否启动
+free            系统内存               ping                    查看一下相互间是否存活
+swapon -s   查看swap分区      traceroute            追踪路由器
+df -h           查看磁盘              iostat                   磁盘读写性能
+
+
+zabbix server            ens33(192.168.43.50)
+zabbix client_web1   ens33(192.168.43.51)
+zabbix client_web2   ens33(192.168.43.52)
+主机名 ip地址  yum源头
+
+zabbix server 需要LNMP 环境
+<?php
+$i=33 ;
+echo $i;
+>?
+

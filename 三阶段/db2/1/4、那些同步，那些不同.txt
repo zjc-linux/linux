@@ -1,0 +1,31 @@
+[root@mysql50 mysql]# vim /etc/my.cnf           ---|
+[mysqld]                                        ---|---主库配置(对所有库生效)
+binlog_do_db=db1,db2   ---设置对那些库同步      ---|
+binlog_ignore=db9      ---设置对那些库不同步    ---|
+---------------------------------------------------
+
+[root@mysql51 ~]# vim /etc/my.cnf             ---|
+replicate_do_db=db2        ---只同步db2库     ---|---从库配置
+replicate_ignore_db=studb  ---不同步studb库   ---|
+
+部署主从从
+[root@mysql50 mysql]# mysqldump -uroot -p123456 db1 > /root/db1.sql  ---对主库进行完全备份
+[root@mysql50 mysql]# scp /root/db1.sql root@192.168.43.52:/root     ---发送备份文件给从库
+MariaDB [(none)]> create database db1;  ---建库
+
+MariaDB [(none)]> use db1;          ---进库
+
+MariaDB [db1]> source /root/db1.sql  ---导入数据   ##此时主从数据一致
+
+[root@mysql52 ~]# vim /etc/my.cnf
+server_id=52
+
+MariaDB [(none)]> change master to
+    -> master_host="192.168.43.50",
+    -> master_user="repluser",
+    -> master_password="123456",
+    -> master_log_file="master50.000004",
+    -> master_log_pos=245;
+ 
+MariaDB [db1]>start slave;
+MariaDB [db1]>show slave status\G;

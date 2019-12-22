@@ -1,0 +1,14 @@
+
+
+[root@node1 ~]# vim /etc/redis/6379.conf
+93 port 6379  修改为6350
+[root@node1 ~]# /etc/init.d/redis_6379 stop   修改端口后这样停不掉服务
+[root@node1 ~]# redis-cli -p 6350     shutdown  停止服务
+[root@node1 ~]# redis-cli -p 6350     进入redis
+
+70 bind 127.0.0.1  修改为192.168.1.50  连接redis的ip
+[root@node1 ~]# redis-cli -h 192.168.1.50 -p 6350   
+[root@node1 ~]# redis-cli -h 192.168.1.50 -p 6350 shutdown   停止服务
+# requirepass foobared  修改为 requirepass 123456    ##  123456 为连接数据库密码
+[root@node1 ~]# redis-cli -h 192.168.1.50 -p 6350 -a 123456   ##  -a 后跟密码
+[root@node1 ~]# redis-cli -h 192.168.1.50 -p 6350 -a 123456 shutdown  加密码后停止服务

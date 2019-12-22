@@ -1,0 +1,64 @@
+在主机192.168.43.10运行数据读写分离服务，把读访问给主机mysql52处理
+                                           写访问给主机mysql51处理
+配置步骤
+1、部署mysql 一主一从同步结构
+2、部署数据读写分离服务器192.168.43.10
+2.1、装包 maxscale-2.1.2-1.rhel.7.x86_64.rpm
+2.2、修改配置文件
+[root@client ~]# vim /etc/maxscale.cnf
+  9 [maxscale]
+ 10 threads=1   服务启动后运行线程的数量  #修改为threads=auto 根据cup核数生成线程数量  
+
+ 18 [server1]
+ 19 type=server
+ 20 address=127.0.0.1 数据库服务器的IP 改为192.168.43.51    master
+ 21 port=3306
+ 22 protocol=MySQLBackend
+
+18 [server2]
+ 19 type=server
+ 20 address=127.0.0.1 数据库服务器的IP 改为192.168.43.52    slave
+ 21 port=3306
+ 22 protocol=MySQLBackend
+
+ 30 [MySQL Monitor]     ---监视mysql         主从结构是否正常 谁是主 谁是从           
+ 31 type=monitor
+ 32 module=mysqlmon           
+ 33 servers=server1,  server2  ---加上server2
+ 34 user=myuser ---scalemon
+ 35 passwd=mypwd  ---123456
+ 36 monitor_interval=10000
+
+ 63 [Read-Write Service]          检查客户端访问的用户在数据库mysql.user存不存在 对不对
+ 64 type=service
+ 65 router=readwritesplit
+ 66 servers=server1, server2   ------
+ 67 user=pljadmin                -----
+ 68 passwd=123456              -----
+ 69 max_slave_connections=100%
+
+75 [MaxAdmin Service]   ---管理服务  默认
+ 76 type=service
+ 77 router=cli
+
+
+ 85#[Read-Only Listener]           只读服务监听端口号
+ 86 #type=listener
+ 87 #service=Read-Only Service
+ 88 #protocol=MySQLClient
+ 89 #port=4008
+
+91 [Read-Write Listener]      读写分离服务监听端口
+ 92 type=listener
+ 93 service=Read-Write Service
+ 94 protocol=MySQLClient
+ 95 port=4006
+
+97 [MaxAdmin Listener]     管理服务端口
+ 98 type=listener
+ 99 service=MaxAdmin Service
+100 protocol=maxscaled
+101 socket=default
+102 port=4026
+
+

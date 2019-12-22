@@ -1,0 +1,30 @@
+  增量备份
+1、首先做完全备份(第一次备份时要把所有数据备份)
+[root@mysql50 ~]# innobackupex --user root --password 123456 /fullbak --no-timestamp
+
+2、 向表里写新数据，做增量备份
+[root@mysql50 ~]# innobackupex --user root --password 123456 --incremental /new1dir 
+                                                             --incremental-basedir=/fullbak --no-timestam
+3、 第二次向表里写新数据，做增量备份
+[root@mysql50 ~]# innobackupex --user root --password 123456 --incremental /new2dir 
+                                                             --incremental-basedir=/new1dir --no-timestamp
+  增量恢复
+[root@mysql50 ~]# systemctl stop mariadb
+[root@mysql50 ~]# rm -rf /var/lib/mysql   ---假设数据误删
+
+1、准备恢复数据
+[root@mysql50 ~]# mkdir /var/lib/mysql    --创建数据库目录
+[root@mysql50 ~]# innobackupex --apply-log --redo-only /fullbak
+
+2、合并日志文件
+[root@mysql50 ~]# innobackupex --apply-log --redo-only /fullbak --incremental-dir=/new1dir
+[root@mysql50 ~]# innobackupex --apply-log --redo-only /fullbak --incremental-dir=/new2dir
+
+3、把备份目录下数据拷贝到数据库目录下
+[root@mysql50 ~]# innobackupex --copy-back /fullbak
+
+4、修改数据库目录下所有者和组用户为mysql
+[root@mysql50 ~]# chown -R mysql.mysql /var/lib/mysql
+
+5、启动数据库服务
+

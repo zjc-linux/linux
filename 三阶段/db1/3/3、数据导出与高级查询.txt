@@ -1,0 +1,51 @@
+mysql> select * from db3.user into outfile 查询 结果导出
+    -> "/mydate/db3_user.txt";
+
+mysql> select name,shell,uid from db3.user into outfile  查询指定字段导出
+    -> "/mydate/db3_user2.txt";
+--------------------------------------------------------------------------------------------------
+mysql> insert into user                                                 ---插入表记录
+    -> values
+    -> (42,"bob","x",3001,3001,"test user","/home/bob","/bin/bash"); 
+
+mysql> insert into user (name ,uid, gid)
+    -> values
+    -> ("tom",4001,4002);
+
+mysql> select * from user;                                              ---查询表记录
+mysql> select name uid gid from user;
+mysql> select name ,uid from user where uid <=10;
+
+mysql> select name ,shell from user                   查询字段
+    -> where
+    -> shell not in ("/bin/bash" , "/bin/nologin");   解释器不是/bin/bash /bin/nologin的有
+
+mysql> select * from user   查询表
+    -> where
+    -> id between 10 and 20; id字段在10到20之间的
+
+mysql> select distinct shell from user;    distinct 字段 去掉重复显示的值(查询shell字段有多少种)
+------------------------------------------------------------------------------------------------------------------
+  模糊查询
+where 字段名 like “通配符”
+  _匹配单个字符  %匹配0-N个字符
+
+select name from user where name like "%a%";  包含2
+select name from user where name like "_a_";   三个字符中间是a     ....
+
+正则表达式查询                              regexp后边可以跟正则
+mysql> select name,uid from user where uid regexp "^...$";
+
+四则运算
+mysql> update user set uid=uid+1,gid=gid-1;   更新字段 uid全部加1 gid全部减一
+mysql> alter table user add age int default 18 after name;  修改字段 增加 age 放在name字段后
+mysql> select name,age,2018-age nianling from user;
+                       运算     结果字段名
+mysql> select name ,age ,2019-age nianling from user where name="root";  运算结果加匹配条件
+
+提高优先级
+mysql> select uid,gid,(uid+gid)/2 zjc from user where name="bin";
+
+mysql> select name,uid from user where name="root" and uid=1 or uid=2;
+mysql> select name,uid from user where name="root" and (uid=1 or uid=2);
+

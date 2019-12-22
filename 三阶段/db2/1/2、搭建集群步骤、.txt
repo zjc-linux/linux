@@ -1,0 +1,40 @@
+主库配置
+
+[root@mysql50 ~]# vim /etc/my.cnf    ---修改配置文件
+[mysqld]
+log_bin=master50
+server_id=50
+binlog_format="mixed"
+
+MariaDB [(none)]> grant replication slave on *.* to repluser@"%"   ---进行授权为从库提供同步数据权限
+    -> identified by "123456";
+
+MariaDB [(none)]> show master status;   ---查看主库当前日志文件名 偏移位置
+-----------------------------------------------------------------------------------------------------------------
+从库配置
+
+[root@mysql51 ~]# vim /etc/my.cnf  ---修改从库配置文件
+[mysqld]
+server_id=51
+                                                         |MariaDB [(none)]> stop slave;  ---如果错了先停从库slave
+MariaDB [(none)]> change master to       ---进行从库配置 | 在进行 change master to
+    -> master_host="192.168.43.50",                      |        ......
+    -> master_user="repluser",                           |
+    -> master_password="123456",                         |
+    -> master_log_file="master50.000001",                |
+    -> master_log_pos=389;                               |
+                                                         |
+MariaDB [(none)]> start slave;  启动IO线程与SQL线程      |
+                                                         |
+MariaDB [(none)]> show slave status\G;  查看从库信息     |
+
+[root@mysql50 ~]# mysql -uroot -p123456
+MariaDB [(none)]> create database db1;      ---建库
+MariaDB [(none)]> create table db1.a(id int);   ---建表
+MariaDB [(none)]> grant select,insert on db1.* to yaya100@"%" identified by "123456";   ---创建授权
+
+[root@client ~]# mysql -h192.168.43.50 -uyaya100 -p123456           ---授权登录
+MariaDB [(none)]> insert into db1.a values(100),(101),(102),(103);  ---授权用户插入记录
+
+登录50 51 数据库都可以看到同样的数据
+

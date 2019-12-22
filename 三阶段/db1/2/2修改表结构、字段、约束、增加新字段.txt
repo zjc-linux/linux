@@ -1,0 +1,42 @@
+alter table 表名 执行动作;
+                  add      增加字段
+                  modify   修改字段类型
+                  change   修改字段名
+                  drop     删除字段
+                  rename   修改表名
+mysql> alter table t4 add email varchar(30) default 'zzz@163.com',  修改字段加入email
+                      add tel char(11);                                         tel
+---------------------------------------------------------------------------------------------|
+mysql> alter table t4 add       修改字段 加入                                                |
+    -> stu_num char(11) first;    stu_num 并放入字段最前面                                   |
+---------------------------------------------------------------------------------------------|--增加字段
+mysql> alter table t4 add                           修改字段 加入                            |
+    -> class char(7) default 'nsd1808' after name;  class字段并放入 name字段后面             |
+---------------------------------------------------------------------------------------------|
+mysql> alter table t4 modify stu_num char(10);  ------------------ 把char由11改为10
+mysql> alter table t4 modify age tinyint(4) default 25; ---------- 把not null 去掉
+mysql> alter table t4 modify age tinyint default 25 after name; -- 把age字段放到name后面
+
+mysql> alter table t4
+    -> change email mail      -----------------修改字段名
+    -> varchar(30) default 'zzz@163.com';
+
+mysql> alter table t4 drop mail,drop class; ---删除mail class字段
+
+mysql> alter table t4 rename stutab;    -------修改表名字
+--------------------------------------------------------------------------------------------------
+mysql> create index name on stutab(name); ---创建索引
+  
+mysql> drop index name on stutab;   ---------删除索引
+
+mysql> create table t4(
+    -> name char(10) not null,
+    -> age tinyint not null default 25,
+    -> index(name)     --------------------建表时创建索引 
+    -> );
+mysql> show index from t4\G;  ----------查看索引信息
+------------------------------------------------------------------------------------------
+
+
+
+

@@ -1,0 +1,31 @@
+聚集函数
+ avg   统计字段平均值
+ sum   统计字段和
+ min   统计字段最小值
+ max   统计字段最大值
+ count 统计字段值个数
+mysql> select count(name) from user;    查询用户个数
+mysql> select count(name) from user where shell="/bin/bash"; 查询使用shell是/bin/bash的用户个数
+mysql> select min(uid) from user where uid<=1000;   在uid<=1000范围内 查询uid最小的值
+mysql> select max(uid) from user where uid<=1000;   在uid<=1000范围内 查询uid最大的值
+
+查询结果排序
+mysql> select name, uid from user order by uid;      查询字段uid name 按照uid从小到大顺序排序
+mysql> select name, uid from user order by uid desc; 查询字段uid name 按照uid从大到小顺序排序
+
+查询结果分组
+mysql> select gid from user group by gid;     查询gid 并且分组看看都有什么gid
+mysql> select shell from user group by shell; 查询shell 并且分组看看都使用了什么shell 
+mysql> select shell from user
+    -> where uid>10 and uid<=2000 group by shell; 查询shell 范围为 10>uid>=2000 并且分组看看都用了什么shell
+
+限制查询结果显示行数
+mysql> select * from user limit 1; 查询表 只显示结果第一行
+mysql> select * from user limit 1,4;  查询表 从第2行开始显示(第一行为0) 从2开始显示4行
+mysql> select * from user limit 1,1;  查询表 从第二行显示 只显示一行
+
+查询结果过滤
+mysql> select name from user where shell !="/bin/bash" having name="mysql";
+        查询 名字                  shell不是/bin/bash的  结果里有没有名字是mysql的  
+
+

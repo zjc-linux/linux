@@ -1,0 +1,34 @@
+NOSQL_day01
+一、部署Redis服务
+1、装包   安装gcc  
+[root@node1 ~]# tar -zxvf redis-4.0.8.tar.g
+[root@node1 redis-4.0.8]# make                解压后不用./gure 可以直接make && makeinstall 
+[root@node1 redis-4.0.8]# make  install
+
+2、初始化
+[root@node1 utils]# pwd
+/root/redis-4.0.8/utils
+[root@node1 redis-4.0.8]# ./utils/install_server.sh
+
+3、查看服务运行状态
+[root@node1 ~]# ss -nultp | grep  6379
+--停止 [root@node1 ~]# /etc/init.d/redis_6379 stop
+--启动 [root@node1 ~]# /etc/init.d/redis_6379 start
+4、连接服务
+[root@node1 ~]# redis-cli
+5、存储数据
+127.0.0.1:6379> keys *               显示所有变量
+127.0.0.1:6379> set name bob   存储变量为name的值为bob
+127.0.0.1:6379> get name          显示变量name的值
+127.0.0.1:6379> select 数据库编号0-15   切换库
+127.0.0.1:6379> keys a?   查看以a开头变量为2个字符的变量
+127.0.0.1:6379> ttl name    查看生存时间 -1为永远不失效	
+127.0.0.1:6379> expire name 20   设置生存时间 20S
+127.0.0.1:6379> del name   删除变量
+127.0.0.1:6379> flushall    清空所有数据
+127.0.0.1:6379> flushdb   清除当前所有库数据
+127.0.0.1:6379> save    手动立马保存所有数据
+127.0.0.1:6379> shutdown  手动停止服务 此时会把内存里的数据写进硬盘 
+127.0.0.1:6379> move age 1   把变量age 从0号库移动到1号库
+6、断开连接
+exit

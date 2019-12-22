@@ -1,0 +1,13 @@
+[root@node1 ~]# echo 123456 | passwd --stdin softadm
+
+[root@node1 ~]# visudo(带错误检查)  或 vim /etc/sudoers
+给谁授权     授权他在那台主机执行命令=(以什么人的身份)        执行什么命令
+softadm                 ALL=(ALL)                                          /usr/bin/systemctl
+softadm                 ALL=(ALL)                                /usr/bin/systemctl,/usr/bin/yu
+useradm                ALL=(ALL)      /usr/sbin/useradd,/usr/bin/passwd,!/usr/bin/passwd root  (!命令 root ##这个命令不可用在root)
+ pete                     ALL=(ALL)     /usr/bin/passwd [A-Za-z]*, !/usr/bin/passwd root     [A-Za-z]*   ##passwd 后面必须跟东西
+[softadm@node1 ~]$ sudo systemctl start httpd 	  
+[root@node1 ~]# gpasswd -d useradm wheel      把用户 useradm 移除 wheel组   #wheel组的都是超级管理员
+
+[root@node1 ~]# vim /etc/sudoers
+Defaults logfile="/var/log/sudo"    启动sudo日志   默认没有日志

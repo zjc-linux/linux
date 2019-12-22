@@ -1,0 +1,8 @@
+配置数据库 mysql
+MariaDB [(none)]> create database zabbix character set utf8;  创建zabbix库
+MariaDB [(none)]> grant all on zabbix.* to zabbix@"localhost" identified by "zabbix";  创建一个zabbix用户对其授权
+[useradm@zabbixserver mysql]$ pwd
+/home/useradm/lnmp_soft/zabbix-3.4.4/database/mysql
+[useradm@zabbixserver mysql]$ mysql -uzabbix -pzabbix zabbix < schema.sql      导入zabbix的表结构之类的信息 有顺序
+[useradm@zabbixserver mysql]$ mysql -uzabbix -pzabbix zabbix < images.sql 
+[useradm@zabbixserver mysql]$ mysql -uzabbix -pzabbix zabbix < data.sql

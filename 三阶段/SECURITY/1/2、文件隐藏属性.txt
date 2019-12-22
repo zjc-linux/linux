@@ -1,0 +1,11 @@
+锁定文件
+[root@node1 ~]# lsattr 6379.conf    查看文件隐藏属性
+---------------- 6379.conf
+
+[root@node1 ~]# chattr +i 6379.conf  锁定文件(无法进行修改) 不可以修改 删除  可以读不可以追加
+[root@node1 ~]# lsattr 6379.conf
+----i----------- 6379.conf
+[root@node1 ~]# chattr -i 6379.conf   解除锁定 去掉i 权限
+
+[root@node1 ~]# chattr +a 6379.conf  锁定文件  不可以删除 修改 可以进行追加
+[root@node1 ~]# chattr -a 6379.conf   解除锁定

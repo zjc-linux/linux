@@ -1,0 +1,17 @@
+ null     允许为空
+ not null 不允许为空
+ key      索引类型
+ default  设置默认值，缺省为null
+
+mysql> create table t4( name char(10) not null, age tinyint not null default 25,
+ likes set('eat','sleep','game')default 'eat,game');    ---------------创建表设置默认值
+
+mysql> insert into t4(name) values('bob');  -----------------只插入名字字段
+mysql> select * from t4;                         ------------查看默认值效果
++------+-----+----------+
+| name | age | likes    |
++------+-----+----------+
+| bob  |  25 | eat,game |
++------+-----+----------+
+
+

@@ -1,0 +1,28 @@
+mysql> create table  yg( yg_id int primary key auto_increment, name char(10) )engine=innodb; --创建员工表
+mysql> insert into yg(name) values('bob');  --插入记录bob 和tom
+---------------------------------------------------
+mysql> create table gz(
+    -> gz_id int,
+    -> pay float(7,2),
+    -> foreign key(gz_id) references yg(yg_id) 
+       #谁做外键          外键的值参考谁 yg表(yg_id字段)
+    -> on update cascade on delete cascade
+       开启 同步更新     开启 同步删除
+    -> )engine=innodb;  ---存储引擎是innodb
+
+mysql> select * from yg; |
++-------+------+         |mysql> insert into gz values (3,45000);  
+| yg_id | name |         |   yg表里没有id为3的员工所以不能赋值
++-------+------+         |   
+|     1 | bob  |         |
+|     2 | tom  |         |
++-------+------+         |
+
+mysql> delete from yg where yg_id=1;  ---删除yg表中id为1的字段 由于前边配置同步删除 所有yg gz表中id为1的字段都没了
+
+mysql> update yg set yg_id=8 where yg_id=2; 把yg表中id为2的改为8 由于配置有同步更新 所有yg gz表中id为2的都表为8 
+
+删除外键
+mysql> show create table gz;   查看建表命令
+mysql> alter table gz drop foreign key gz_ibfk_1;   
+ 

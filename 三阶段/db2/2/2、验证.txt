@@ -1,0 +1,14 @@
+2.3、根据配置文件的设置增添对应的用户
+scalemon  123456
+MariaDB [(none)]> grant replication slave, replication client on *.* to scalemon@"%" identified by "123456";
+
+MariaDB [(none)]> grant select on mysql.* to pljadmin@"%" identified by "123456";
+
+pljadmin   123456
+
+2.4、启动数据读写分离服务
+[root@client ~]# maxscale -f /etc/maxscale.cnf   ---修改完配置 创建授权后启动
+
+[root@client ~]# killall -9 maxscale   ----通过杀死进程关闭
+
+3、在客服端验证数据读写分离的配置

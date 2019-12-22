@@ -1,0 +1,12 @@
+[useradm@node1 ~]$ sudo vim /etc/ssh/sshd_config
+PermitRootLogin no  禁止root用户登陆
+#-0 no    禁止空密码登陆
+#LoginGraceTime 2m  登陆限时时间(多久不输入密码自动关闭)
+
+[useradm@node1 ~]$ sudo passwd -d useradm    清除账号密码
+
+AllowUsers tom@客户端IP    只允许这个用户远程并且IP必须为这个  其他拒绝  
+AllowUsers tom  值允许tom用户在任何主机上远程
+DenyUsers   xyz 拒绝那个用户远程
+
+#PasswordAuthentication yes    必须用密钥登陆 

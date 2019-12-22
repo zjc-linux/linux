@@ -1,0 +1,31 @@
+[root@mysql50 ~]# rpm -ivh libev-4.15-1.el6.rf.x86_64.rpm   ---安装依赖
+[root@mysql50 ~]# yum -y install percona-xtrabackup-24-2.4.7-1.el7.x86_64.rpm   ---安装
+[root@mysql50 ~]# rpm -ql percona-xtrabackup-24   ---查询安装位置与命令
+
+  --host       主机名                            |--redo-only                 日志合并
+  --user       用户名                            |--apply-log                 准备还原(回滚日志)
+  --port       端口名                            |--copy-back                 恢复数据
+  --password   密码                              |--incremental 目录名        增量备份
+  --databases  数据库名                          |--incremental-basedir=目录名 增量备份时，指定上一次备份数据存储
+  --no-timestamp 不用日期命名备份储存的子目录名  |                                                 的目录名
+    ---databases="库名"     //单个库             |--incrementak-dir=目录名     准备恢复数据时，指定增量备份数据存储
+    ---databases="库1 库2"  //多个表             |                                的目录名
+    ---databases="库.表"    //单个表             |--export                    导出表信息
+                                                 |import                      导入表空间 
+完全备份
+[root@mysql50 ~]# innobackupex --user root --password 123456 /allbak --no-timestamp
+[root@mysql50 ~]# ls /allbak/     备份完成后即有备份数据又有配置文件 配置文件里记录备份信息
+
+完全恢复
+1、准备恢复数据
+  [root@mysql50 ~]# innobackupex --user root --password 123456 --apply-log /allbak
+  [root@mysql50 ~]# systemctl stop mariadb
+  [root@mysql50 ~]# rm -rf /var/lib/mysql/
+
+2、拷贝备份文件到数据库目录下
+[root@mysql50 ~]# innobackupex --user --password --copy-back /allbak/
+
+3、修改文件所有者和组用户为mysql
+[root@mysql50 ~]# chown -R mysql.mysql /var/lib/mysql/
+
+4、启动数据库服务

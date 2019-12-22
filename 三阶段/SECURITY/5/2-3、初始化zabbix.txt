@@ -1,0 +1,19 @@
+[useradm@zabbixserver php]$ sudo useradd zabbix   创建zabbix用户
+[useradm@zabbixserver ~]$ sudo vim /usr/local/etc/zabbix_server.conf 修改server 配置文件
+# DBHost=localhost   去掉注释       #数据库主机 默认被注释
+DBName=zabbix    设置数据库名称
+DBUser=zabbix       设置数据库账户
+# DBPassword=        数据库用户密码 默认注释  授权的是什么写什么
+# LogFile=/tmp/zabbix_server.log  设置日志 打开后zabbix有问题的时候可以看日志
+[useradm@zabbixserver ~]$ zabbix_server   ---------------启动zabbix_server
+
+[useradm@zabbixserver ~]$ sudo vim /usr/local/etc/zabbix_agentd.conf
+Server=127.0.0.1,192.168.43.50                          #允许那些主机监控
+ServerActive=127.0.0.1,192.168.43.50                 #允许那些主机监控
+Hostname=Zabbix server                                  # 设置本机主机名
+LogFile=/tmp/zabbix_agentd.log                      #设置本机日志
+# UnsafeUserParameters=0   去掉注释 把0修改为1   是否允许自定义监控
+[useradm@zabbixserver ~]$ zabbix_agentd  ----------------启动zabbix_agentd
+
+
+此时可以使用真机的浏览器  访问192.168.43.50/index.php

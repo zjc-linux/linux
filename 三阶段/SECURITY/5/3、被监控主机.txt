@@ -1,0 +1,26 @@
+[root@zabbixclient_web1 ]# useradd zabbix
+[root@zabbixclient_web1 ]# yum -y install gcc pcre-devel
+[root@zabbixclient_web1 zabbix-3.4.4]# tar -zxvf zabbix-3.4.4.tar.gz
+[root@zabbixclient_web1 zabbix-3.4.4]# ./configure --enable-agent
+[root@zabbixclient_web1 zabbix-3.4.4]# make && make install           ------web1与web2都做
+[root@zabbixclient_web1 core]# pwd
+/root/lnmp_soft/zabbix-3.4.4/misc/init.d/fedora/core
+[root@zabbixclient_web1 core]# cp zabbix_agentd /etc/init.d/   拷贝启动脚本(做不做都可以)
+
+[root@zabbixclient_web2 ~]# vim /usr/local/etc/zabbix_agentd.conf
+Server=127.0.0.1,192.168.43.50                  谁可以监控本机(被动监控)
+ServerActive=127.0.0.1,192.168.43.50         谁可以监控本机(主动监控)
+Hostname=Zabbix_client_web1                 被监控端自己的主机名
+EnableRemoteCommands=1                     监控异常后是否允许服务器远程过来执行命令 如重启某个服务
+UnsafeUserParameters=1        是否允许自定义key监控
+[root@zabbixclient_web2 ~]# zabbix_agentd    启动agent服务
+
+把自定义脚本加入监控
+[root@zabbixclient_web1 ~]# vim /usr/local/etc/zabbix_agentd.conf
+UnsafeUserParameters=1   需要把默认值设置为1 
+# Include=/usr/local/etc/zabbix_agentd.conf.d/  去除注释 以后脚本需要放在这里
+[root@zabbixclient_web1 zabbix_agentd.conf.d]# vim ./count.line.passwd
+UserParameter=count.line.passwd， cat /etc/passwd | wc -l   UserParameter是必须写的      逗号后面是具体的命令
+
+本机测试脚本是否可以使用
+[root@zabbixclient_web1 ~]# zabbix_get -s 127.0.0.1 -k count.line.passwd

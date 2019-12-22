@@ -1,0 +1,71 @@
+1、在管理主机创建集群配置文件
+2、[root@node7-56 ~]# mkdir /etc/mha/
+[root@node7-56 conf]# pwd
+/root/mha-soft-student/mha4mysql-manager-0.56/samples/conf
+[root@node7-56 conf]# cp app1.cnf /etc/mha
+[server default]
+manager_workdir=/var/log/masterha/app1            修改为 /etc/mha
+manager_log=/var/log/masterha/app1/manager.log  修改为/etc/mha/manager.log
+master_ip_failover_script=/etc/master_ip_failover     手写添加的
+
+ssh_user=root   ---无密码登陆
+ssh_port=22      ---无密码ssh端口
+
+repl_user=repluser           --主从复制用户
+repl_password=123456     --主从同步密码
+
+user=root                  ---管理主机用于连接被管理主机的数据库root
+password=123456      ---   密码
+
+[server1]
+hostname=host1      修改为192.168.1.51
+port=3306         手动增加
+candidate_master=1
+
+[server2]
+hostname=host2      修改为192.168.1.52
+port
+candidate_master=1     ---竞选主库
+
+[server3]
+hostname=host3                192.168.1.53
+port
+candidate_master=1
+
+[server4]
+hostname=host4   修改为   192.168.1.54
+no_master=1     ---不竞选主库
+
+[server4]
+hostname=host4   修改为    192.168.1.55
+no_master=1     ---不竞选主库
+
+3.创建切换脚本
+cp  master_ip_failover  /etc/mha
+chmod +x /etc/mha/master_ip_failover
+vim  /etc/mha/master_ip_failover
+
+ 34 my $vip = '192.168.1.100/24'  #Virtual IP
+ 35 my $key = '1'
+ 36 my $ssh_start_vip  = "/sbin/ifconfig ens33:$key $vip";
+ 37 my $ssh_stop_vip = "/sbin/ifconfig ens33:$key down";
+
+4.在竞选主数据库服务器上增加授权用户
+MariaDB [(none)]> grant all on *.* to root@"%" identified by "123456";   在51上授权  从主机会进行同步
+[root@node7-56 mha]# yum -y install mariadb    --56安装mysql命令
+
+5.把vip地址绑定在当前主库的服务器IP ens33接口
+[root@node2-51 ~]# ifconfig ens33:1 192.168.1.100    ens33:1 增加IP  临时配置
+
+6.在管理主机56上测试配置
+--1.测试ssh配置
+[root@node7-56 ~]# masterha_check_ssh --conf=/etc/mha/app1.cnf    测试ssh通过后继续
+
+--2.测试主从同步配置
+[root@node7-56 mha]# masterha_check_repl --conf=/etc/mha/app1.cnf 测试同步后通过
+
+7.启动管理服务
+
+
+
+

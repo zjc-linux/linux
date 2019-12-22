@@ -1,0 +1,21 @@
+[useradm@node1 ~]$ sudo iptables -t filter -I INPUT -p icmp -j ACCEPT   允许icmp
+
+[useradm@node1 ~]$ sudo iptables -t filter -I INPUT -p icmP -j REJECT     通过icmp
+
+[useradm@node1 ~]$ sudo iptables -t     filter       -I  INPUT 2      -p icmp    -j DROP
+                                                                   -I 链名 数字是几放在第几条
+
+[useradm@node1 ~]$ sudo iptables -t filter -I INPUT -p tcp -j ACCEPT  允许所有tcp协议通过
+[useradm@node1 ~]$ sudo iptables -P INPUT DROP  修改默认规则   不是tcp协议的全部拒绝
+
+[useradm@node1 ~]$ sudo iptables -I INPUT -s 192.168.43.51 -p icmp -j DROP   
+                                                          入站链     -s 源地址 43.51  -p协议icmp  -j 动作 丢弃     (不写协议拒绝43.51所有访问)
+
+[useradm@node1 ~]$ sudo iptables -D INPUT 2  删除默认规则的第二条
+
+[useradm@node1 ~]$ sudo iptables -I OUTPUT -d 192.168.43.254 -p icmp -j DROP
+                                                            出站链    -d 目标地址43.254 -p icmp  -j 动作 丢弃     (不写协议拒绝所有出站请求)  
+
+[useradm@node1 ~]$ sudo iptables -I INPUT -p tcp        --dport 80     -j     REJECT
+                                                           进站    -p tcp协议   指定端口 80   -j 动作  丢弃通知                                                    
+

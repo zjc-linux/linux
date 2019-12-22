@@ -1,0 +1,16 @@
+三、配置高可用集群
+3.3 集群环境准备
+3.3.2  配置所有数据库服务器主机之间彼此无密码登陆
+3.3.3  所有主机56可以无密码连接所有的数据库服务器
+3.3.3  所有主机51-56安装perl软件包  yum -y  install perl-*      ---系统光盘里有的依赖 都装
+3.3.4.0 安装MHA依赖的软件包
+[root@node7-56 ~]# cd mha-soft-student/                 ---系统光盘里没有的依赖 51-56都装
+
+[root@node2-51 mha-soft-student]# rpm -ivh mha4mysql-node-0.56-0.el6.noarch.rpm  51-56安装node包
+
+安装MHA
+[root@node7-56 mha-soft-student]# tar -zxvf  mha4mysql-manager-0.56.tar.gz
+[root@node7-56 mha-soft-student]# cd mha4mysql-manager-0.56
+[root@node7-56 mha4mysql-manager-0.56]# perl Makefile.PL      相当于./confgure
+[root@node7-56 mha4mysql-manager-0.56]# make          
+[root@node7-56 mha4mysql-manager-0.56]# make install

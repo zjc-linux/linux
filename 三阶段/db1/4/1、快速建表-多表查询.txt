@@ -1,0 +1,46 @@
+复制表
+   作用：1、备份表 2、快速建表
+mysql> create database db4;
+mysql> create table db4.user2 select * from db3.user; 创建表 并且db3.user表中数据复制
+mysql> create table db4.user select * from db3.user where 1=2; 创建表 由于where不成立不能复制数据 只创建了表结构
+mysql> create table db4.t1 select name ,uid ,gid from db3.user limit 3;  复制数据并为数据创建表
+----------------------------------------------------------------------------------------------------------------
+多表查询
+mysql> create table t2 select name ,uid ,shell from
+    -> db3.user limit 3;  创建表
+  
+mysql> create table t3 select name ,uid ,homedir from db3.user limit 5; 创建表
+
+mysql> select t2.name,t2.uid,t3.* from t2 ,t3 where t2.uid=t3.uid;  
+  查询 t2.name字段，t2.uid字段 t3.全部     条件为t2.uid与t3.uid相等时才显示
+
+mysql> select t2.name from t2,t3 where t2.uid=t3.uid;
+-----------------------------------------------------------------------------------------------------------------
+方法二、where子查询
+mysql> select name,uid from user2               查询name uid字段 user2表
+       where uid >(select avg(uid) from user2);  条件uid 大于在user2表中uid字段的平均值
+
+mysql> select name from db3.user                查询name字段 在db3.user中
+    -> where
+    -> name in (select name from db4.t2);    名字的值需要来自db4.t2的name查询结果
+-----------------------------------------------------------------------------------------------------------------
+方法三、左右连接查询
+mysql> create table db4.t4
+    -> select name,uid,shell,homedir from db3.user  建表4
+    -> limit 8;
+
+mysql> create table db4.t5
+    -> select name,uid,shell,homedir from db3.user  建表5
+    -> limit 12;
+
+mysql> select * from t4 left join t5 ---左连接查询 以左边为准 显示相同部分
+    -> on
+    -> t4.uid=t5.uid;
+
+mysql> select * from 
+    -> t4 right join t5 on t4.uid=t5.uid;  ---右连接查询 以右边为准 显示相同与不用部分
+
+
+
+
+

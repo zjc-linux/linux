@@ -1,0 +1,5 @@
+上线zabbix页面
+[useradm@zabbixserver php]$ pwd
+/home/useradm/lnmp_soft/zabbix-3.4.4/frontends/php
+[useradm@zabbixserver php]$ sudo cp -a * /usr/local/nginx/html/       复制初始化页面
+[useradm@zabbixserver php]$ chmod -R 777 /usr/local/nginx/html/*   给于权限

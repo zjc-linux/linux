@@ -1,0 +1,22 @@
+   mysql前面早装过的
+[root@mysql ~]# yum -y install httpd php php-mysql
+
+[root@mysql html]# vim test.php   写测试脚本
+<?php
+phpinfo();
+?>
+[root@mysql ~]# systemctl start httpd  启动服务  访问测试
+        
+[root@mysql]# tar -xf phpMyAdmin-2.11.11-all-languages.tar.gz -C /var/www/html/
+[root@mysql]# mv phpMyAdmin-2.11.11-all-languages phpmyadmin
+[root@mysql]# chown -R apache.apache phpmyadmin
+[root@mysql]# cp config.sample.inc.php config.inc.php 根据模板写配置文件
+[root@mysql]# vim  config.inc.php
+ 17 $cfg['blowfish_secret'] = 'zjc';   引号里随便写点东西不为空就行
+ 31 $cfg['Servers'][$i]['host'] = 'localhost';  mysql服务器在哪里就写哪里的ip  实验不需要改
+ 访问网页http://192.168.43.13/phpmyadmin/
+                      用户 root
+                      密码 123456
+
+
+                

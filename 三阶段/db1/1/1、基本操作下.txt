@@ -1,0 +1,56 @@
+mysql> select database();    --------显示当前所在库
+mysql> show databases;       --------显示所有库
+mysql> use 库名;             --------切换库
+mysql> create database 库名; --------创建新库
+mysql> drop database 库名;   --------删除库
+mysql> show tables;          --------显示已有表
+DDL 数据定义语言 (create、alter、drop)
+DML 数据操作语言 (insert、update、delete)
+DCL 数据控制语言 (grant、revoke)
+DTL 数据事物语言 (commit、rollback、savepoint)  
+mysql> create database studb;                             --建库
+mysql> create table studb.stuinfo(name char(10),age int); --建表
+mysql> desc studb.stuinfo;                   ---------------查看表结构
+mysql> drop table studb.stuinfo;             ---------------删除表
+mysql> insert into studb.stuinfo values('bob',22),('tom',21); 插入表记录
+mysql> update studb.stuinfo set age=19 where name='tom';   ------ 修改年龄为19 条件为名字是tom
+mysql> update studb.stuinfo set age=18;                    ------ 修改年龄为18 没有条件就是全部
+mysql> select * from studb.stuinfo;          ----查询结果
+mysql> delete from studb.stuinfo where name='tom';   ----删除表记录 条件为名字是tom
+mysql> delete from studb.stuinfo;                    ----删除表记录 没有条件就是全部
+mysql> select * from studb.stuinfo;          ----查询结果
+mysql> drop table studb.stuinfo;  ----删除表
+mysql> show tables;               ----查询表 
+Empty set (0.00 sec)              ----结果为空
+mysql> create table studb.t1(id int);  --随便建一个表
+mysql> show create table t1;           --查看建表命令
++-------+----------------------------------------------------------------------------------------+
+| Table | Create Table                                                                           |
++-------+----------------------------------------------------------------------------------------+
+| t1    | CREATE TABLE `t1` (
+  `id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 |    ###default charset=utf8可以使字符支持中文
++-------+----------------------------------------------------------------------------------------+
+mysql> create table 学生表(姓名 char(3),年龄 int)    
+    -> DEFAULT CHARSET=utf8;                      --支持插入中文记录
+mysql> insert into 学生表 values ('张三丰',22);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from 学生表;
++-----------+--------+
+| 姓名      | 年龄   |
++-----------+--------+
+| 张三丰    |     22 |
++-----------+--------+
+mysql> create table t1( age tinyint unsigned, pay float(7,2) ); 利用数据类型创建 unsigned 无符号
+--------------------------------------------------------------------------------------------------------
+字符类型使用
+mysql> create table t3( name char(3), homedir varchar(15), email varchar(30) );
+
+mysql> insert into t3 values('bob','beijing','bob@163.com');
+---------------------------------------------------------------------------------------------------------------
+mysql> create table t4 ( name char(10), birtyday date, start year, upwork time, party datetime ); 日期时间类型
+mysql> insert into t4 values('bob',2018-11-20,1990,08:30:00,2018-11-18 20:30:00);  插入日期时间数据
+----------------------------------------------------------------------------------------------------------------
+mysql> create table t5( name char(10), likes set('eat','sleep','game'), sex enum('boy','girl','no') ); 枚举类型
+mysql> insert into t5 values('bbb','eat,game','no');   --------------插入枚举类型

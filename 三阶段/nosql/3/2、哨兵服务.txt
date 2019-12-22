@@ -1,0 +1,21 @@
+51 52 53 主从从结构
+54 做哨兵服务器
+55 56 的集群功能关闭 删除数据库目录下所有文件重启redis服务
+设置55 的连接密码为123456 
+把主机56配置为55的从库
+
+[root@node5-54 redis-4.0.8]# vim /etc/sentinel.conf
+bind 0.0.0.0
+sentinel monitor redis51 192.168.31.51 6351 1
+sentinel auth-pass redis51 123456
+
+启动服务
+[root@node5-54 ~]# redis-sentinel /etc/sentinel.conf
+
+数据备份与恢复
+[root@node1 6379]# cd /var/lib/redis/6379/   ---|--数据备份
+[root@node1 6379]# cp dump.rdb /root/       ---|
+
+[root@node1 6379]# /etc/init.d/redis_6379 stop   ---|---数据还原
+[root@node1 6379]# rm -rf dump.rdb                  ---|
+[root@node1 6379]# cp /root/dump.rdb  ./      ------|

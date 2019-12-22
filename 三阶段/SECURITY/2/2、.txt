@@ -1,0 +1,8 @@
+[root@room ~]# yum -y install aide
+[root@room ~]# vim /etc/aide.conf 
+@@define DBDIR /var/lib/aide    存放校验结果的目录
+@@define LOGDIR /var/log/aide
+database=file:@@{DBDIR}/aide.db.gz  第一次校验后检测时把  第一次的new变为aide.db.gz
+database_out=file:@@{DBDIR}/aide.db.new.gz   校验后结果位置
+gzip_dbout=yes  校验要不要进行压缩
+

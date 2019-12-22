@@ -1,0 +1,15 @@
+[useradm@node1 ~]$ sudo md5sum /etc/passwd     MD5校验
+[useradm@node1 ~]$ cat test.sh     etc下配置文件是否被篡改检测  
+#!/bin/bash
+for i in `ls /etc/*.conf`
+do
+md5sum $i >> data.tar.gz
+done
+
+[useradm@node1 ~]$ rpm -qa gnupg2   加密软件     -----
+[useradm@node1 ~]$ gpg --version   查看软件版本    ----
+[useradm@node1 ~]$ gpg -c a.txt  加密(需要输入密码用于解密)   ---
+[root@room ~]# gpg -d a.txt.gpg   解密(需要输入加密时的密码)   ---
+[root@room ~]# gpg --gen-key
+
+

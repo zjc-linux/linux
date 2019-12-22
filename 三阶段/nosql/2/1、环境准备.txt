@@ -1,0 +1,30 @@
+打开redis集群功能    实验需要redis-cluster.tar.gz
+
+[root@node2-51 ~]# vim /etc/redis/6379.conf    搜索 cluster          51--56 全部配置
+
+ 815 # cluster-enabled yes    启用集群功能   去注释
+ 823 # cluster-config-file nodes-6379.conf  本机用来存储集群信息的文件名   6379 改为6351(本机ip)  去注释
+ 829 # cluster-node-timeout 15000   集群通信默认超时时间  修改为5000  去注释
+
+[root@node7-56 init.d]# redis-cli -h 192.168.31.56 -p 6356
+192.168.31.56:6356> CLUSTER INFO      ---查看集群信息
+192.168.31.56:6356> CLUSTER NODES   ---查看中集群主机有哪些
+
+在管理主机上装包   (51主机)
+[root@node2-51 ~]# yum -y install ruby(解释ruby脚本)  rubygems(提供命令)
+[root@node2-51 redis-cluster ]# rpm -ivh ruby-devel-2.0.0.648-30.el7.x86_64.rpm
+[root@node2-51 redis-cluster ]# gem install redis-3.2.1.gem
+[root@node2-51 ~]# c d redis-4.0.8/src/
+[root@node2-51 ~]# echo $PATH    -------使用命令tap时系统会去这几个目录找命令
+/root/perl5/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin
+[root@node2-51 ~]# mkdir /root/bin  
+[root@node2-51 src]# cp redis-trib.rb /root/bin
+
+语法格式
+ --redis-trib.rb 选项  参数
+选项
+ --add-node   增加master主机
+ --check         检测集群
+ --reshard       重新分片
+ --add-node --slave 增加slave主机
+ --del-node     删除主机

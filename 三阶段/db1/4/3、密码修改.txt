@@ -1,0 +1,37 @@
+---修改密码
+[root@mysql13 ~]# mysqladmin -hlocalhost -uroot -p password "654321"
+                  mysqladmin -h服务器地址 用户               新密码      回车输入旧密码
+
+恢复mysql管理密码
+ systemctl stop mysql ---先停止服务
+[root@mysql13 ~]# vim /etc/my.cnf  进入数据库配置文件修改
+[mysqld]
+skip-grant-tables        -------跳过授权表
+secure_file_priv="/mydate"
+default-storage-engine=myisam
+#validate_password_policy=0    ---|
+#validate_password_length=6    ---|---注释密码策略 启动mysql服务
+------------------------------------------------------------------
+[root@mysql13 ~]# mysql   ---直接可以登录
+mysql> select * from mysql.user\G;  ---查询要修改的地方  authentication_string 字段太长
+mysql> update mysql.user
+    -> set authentication_string=password("123456")
+    -> where
+    -> user="root" and host="localhost";
+mysql> flush privileges;  刷新权限
+------------------------------------------------------------------
+[root@mysql13 ~]# systemctl stop mysqld  停止服务 
+[root@mysql13 ~]# vim /etc/my.cnf   还原配置文件
+[mysqld]
+#skip-grant-tables      ----注释跳过授权
+secure_file_priv="/mydate"
+default-storage-engine=myisam
+validate_password_policy=0  ---|---还原密码策略  --启动服务正常登陆
+validate_password_length=6  ---|
+
+
+授权密码修改
+mysql> grant select on *.* to u1@"%" identified by "123456";  增加新授权用户
+MySQL [(none)]> set password=password("666666");授权用户登录后修改密码
+-------------------------------------------------------------------------------------------
+mysql> set password for u1@"%"=password("123456");    数据库管理员对用户密码进行修改

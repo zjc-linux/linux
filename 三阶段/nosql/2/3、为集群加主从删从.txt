@@ -1,0 +1,28 @@
+部署 57 58 加入集群
+安装 redis  修改配置文件 
+[root@node2-51 ~]# redis-trib.rb add-node 192.168.31.57:6357 192.168.31.51:6351    
+                                                                      把57主机                  加入集群            默认为master
+
+[root@node2-51 ~]# redis-trib.rb check 192.168.31.51:6351   可以查看到新添加master 57 但是没有分配hash槽  也没有从库
+
+[root@node2-51 ~]# redis-trib.rb reshard 192.168.31.51:6351
+ --指定移出多少hash槽  4096  ##   16384/4=4096  
+ --指定接收hash槽的ID           ###22de8873a06a1d6f1d8acf7158cf79c68219ab11
+ --指定移出hash槽的ID   可以写all   只能某个可以写ID
+
+[root@node2-51 ~]# redis-trib.rb add-node --slave 192.168.31.58:6358 \  把58主机加入加群中
+> 192.168.31.51:6351                          默认谁的主库最少就变为谁的从
+-----------------------------------------------------------------------------------------------------------------------------------------
+移除新增添的从库
+[root@node2-51 ~]# redis-trib.rb del-node 192.168.31.51:6351 \       ----移除从库
+> 25abfc635d4e7b4deb2f31026a45b7339a83d01d
+
+[root@node9-58 ~]# redis-cli -h 192.168.31.58 -p 6358
+192.168.31.58:6358> get y
+(error) MOVED 12222 192.168.31.57:6357
+192.168.31.58:6358> cluster reset    ----集群记录信息清除
+注释启用集群配置  [root@node9-58 ~]# vim /etc/redis/6379.conf     cluster项注释
+[root@node9-58 6379]# pwd
+/var/lib/redis/6379
+[root@node9-58 6379]# rm -rf nodes-6358.conf   删除集群信息文件   从新启动  彻底还原为干净的redis
+  

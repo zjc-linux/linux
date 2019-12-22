@@ -1,0 +1,28 @@
+ 找到  mysql-5.7.20-linux-glibc2.12-x86_64.tar.gz
+需要 gcc    gcc-c++ 没有yum 装      tar解压
+[root@node1 mysql]#  mv /etc/my.cnf /root/   ---把以前的配置文件移动走
+
+[root@node1 mysql]# vim /etc/my.cnf
+[mysqld_multi]                                                 ---启用多实例
+mysqld = /usr/local/mysql/bin/mysqld_safe          ---指定进程文件路径
+mysqladmin = /usr/local/mysql/bin/mysqladmin    ---指定管理命令路径
+user = root                                                   ---指定进程用户
+
+[mysqld1]                            ---实例进程名称 实例进程编号  如[mysql2]
+datadir=/data3307                ---端口号
+port=3307                            ---数据库目录，需要手动创建
+log-error=/data3307/mysqld3307.log   ---指定sock文件的路径和名称
+pid-file=/data3307/mysql3307.pid      ---进程pid的文件位置
+socket=/data3307/mysql3307.socket    ---错误日志位置
+
+[mysqld2]
+datadir=/data3308
+port=3308
+log-error=/data3308/mysqld3308.log
+pid-file=/data3308/mysql3308.pid
+socket=/data3308/mysql3308.socket
+
+
+
+ 
+

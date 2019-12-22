@@ -1,0 +1,37 @@
+1、把mha-soft-student目录下所有软件 分别拷贝到数据库服务器上   
+     在准备一台服务器192.168.1.56 做管理集群的主机
+不需要运行mysql数据库 也拷贝mha-soft-student目录下的所有软件
+
+2、主机192.168.4.50 做客户端，不需要运行mysql数据库服务，也不需要拷贝软件
+
+二、  配置mysql 一主多从结构
+2.1    配置主库 192.168.1.51
+[root@node2-51 ~]# cd /var/lib/mysql/
+[root@node2-51 mysql]# rm -rf master51.*
+[mysqld]
+plugin-load="rpl_semi_sync_master=semisync_master.so;rpl_semi_sync_slave=semisync_slave.so"  
+rpl-semi-sync-master-enabled = 1  
+rpl-semi-sync-slave-enabled = 1   
+server_id=51   
+log_bin=master51
+binlog_format="mixed"
+重启服务
+MariaDB [(none)]> set global relay_log_purge=off;  不自动删除本机中继日志
+MariaDB [(none)]> grants replication slave on *.* to repluser@"%" identified by "123456";
+
+2.2    配置从库
+[mysqld]
+server_id=54
+relay_log_purge = 0
+plugin-load="rpl_semi_sync_slave=semisync_slave.so"
+rpl-semi-sync-slave-enabled = 1
+
+2.2.1  配置备用主库52和53
+2.2.2  配置纯从库 54 55
+2.3     验证配置
+
+三、配置高可用集群
+3.3 集群环境准备
+3.3.2  配置所有数据库服务器主机之间彼此无密码登陆
+3.3.3  所有主机56可以无密码连接所有的数据库服务器
+3.3.3  所有主机51-56安装perl软件包  yum -y  install perl-*

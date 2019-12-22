@@ -1,0 +1,37 @@
+mysql> show variables like "secure_file_priv";  ---导入数据必须把文件放在默认路径下
++------------------+-----------------------+
+| Variable_name    | Value                 |
++------------------+-----------------------+
+| secure_file_priv | /var/lib/mysql-files/ |
++------------------+-----------------------+
+mysql> create table user(      -------------创建一个库
+    -> name char(30),
+    -> password char(1),
+    -> uid int,
+    -> gid int,
+    -> comment char(150),
+    -> homedir char(150),
+    -> shell char(50)
+    -> );
+-------------------------------------------------------------------------------------------
+mysql> system cp /etc/passwd /var/lib/mysql-files/  ---加上system可以在数据库使用系统命令  passwd 放入默认位置
+-------------------------------------------------------------------------------------------
+mysql> load data infile "/var/lib/mysql-files/passwd"  
+    -> into table db3.user
+    -> fields terminated by ":"      ---每一列的分割符号为:
+    -> lines terminated by "\n";     ---文件中行的间隔符  因为passwd文件每条记录一行
+
+mysql> alter table user    
+    -> add          增加
+    -> id int primary key auto_increment first;  id字段 为主键 自动增长
+
+
+修改导入文件的默认路径
+[root@mysql]# vim /etc/my.cf
+[mysqld]
+secure_file_priv="/mydate"  -------新加一行设置导入文件默认路径 并且需要在这个目录为mysql配置写权限
+default-storage-engine=myisam
+....
+[root@mysql]# mkdir /mydate
+[root@mysql]# chown mysql.mysql /mydate
+[root@mysql]# systemctl restart mysqld   ---修改完成

@@ -1,0 +1,26 @@
+[root@node1 ~]# useradd tiechui
+[root@node1 ~]# echo 123456 | passwd --stdin tiechui
+[root@node1 ~]# chage -l tiechui    查看用户信息
+[root@node1 ~]# chage -E 2019-12-25 tiechui    用户在2019-12-25过期
+[root@node1 ~]# chage -E 2018-1-1 tiechui   写一个过期的时间
+[root@node1 ~]# vim  /etc/login.defs    创建用户的默认属性
+PASS_MAX_DAYS   99999      密码有效期时间
+PASS_MIN_DAYS   0               密码最短有效时间
+PASS_MIN_LEN    5                密码最短长度
+PASS_WARN_AGE   7     密码过期前多少天提醒
+
+[root@node1 ~]# passwd -S tiechui     查看账号状态
+[root@node1 ~]# passwd -l tiechui      账号锁定
+[root@node1 ~]# passwd -u tiechui     账号解锁
+
+[root@node1 ~]# vim /etc/issue   隐藏版本信息
+\S                                ---|--删掉随便改下  windos server  2008 R2
+Kernel \r on an \m       ---|
+
+[root@node1 ~]# vim /etc/fstab            /boot下放的都是系统启动文件   noexec 可以让/boot 下程序无效
+UUID=2f71ff37-8ffa-4869-a825-f83cb49ee5a1 /boot                   xfs     defaults        0 0   修改为
+UUID=2f71ff37-8ffa-4869-a825-f83cb49ee5a1 /boot                   xfs     defaults,noexec        0 0
+  noatime让分区下的所=所有文件都不在更新atime时间  atime时间为文件修改时间
+UUID=2f71ff37-8ffa-4869-a825-f83cb49ee5a1 /boot                   xfs     defaults        0 0   修改为
+UUID=2f71ff37-8ffa-4869-a825-f83cb49ee5a1 /boot                   xfs     defaults,noatime       0 0     
+

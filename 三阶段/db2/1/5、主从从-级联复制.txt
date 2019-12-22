@@ -1,0 +1,38 @@
+主从从 50 master 51 slave master  52 slave
+1、把主机52恢复为独立数据库服务器
+2、把主机52恢复为master
+
+[root@mysql51 ~]# vim /etc/my.cnf  ---修改配置文件 
+[mysqld]
+server_id=51                          ----
+log_bin=master51                      ----此时没有开级联复制(把中继日志的binlog日志复制到自己binlig日志)
+binlog_format="mixed"                 ----
+
+[root@mysql51 ~]# systemctl restart mariadb   ---重启服务器使配置文件生效
+
+MariaDB [(none)]> grant replication slave on *.*   ---进行用户授权
+    -> to repluser@"%"
+    -> identified by "123456";
+
+MariaDB [(none)]> show master status;    ---查看master与slave
+MariaDB [(none)]> show slave status\G;  
+
+MariaDB [(none)]> change master to        ---配置从库
+    -> master_host="192.168.43.51",
+    -> master_user="repluser",
+    -> master_password="123456",
+    -> master_log_file="master51.000001",
+    -> master_log_pos=390;
+
+MariaDB [(none)]> start slave;    ---启动从库
+MariaDB [(none)]> show slave status\G; 
+此时中继日志不能复制到binlog日志所有需要在配置文件加入级联复制 
+---
+---
+---
+[root@mysql51 ~]# vim /etc/my.cnf
+[mysqld]
+server_id=51
+log_bin=master51
+binlog_format="mixed"
+log_slave_updates     -----------级联复制

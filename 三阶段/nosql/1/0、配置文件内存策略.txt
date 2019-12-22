@@ -1,0 +1,24 @@
+[root@node1 ~]# vim /etc/redis/6379.conf
+port  6379                                端口
+bind 127.0.0.1                           ip地址
+tcp-backlog 511                       tcp连接总数
+timeout 0                                 连接超时时间
+tcp-keepalive 300                     长连接时间
+daemonize yes                          守护进程方式运行
+databases 16                             数据库个数
+logfile /var/log/redis_6379.log    pid文件
+maxclients 10000                        并发连接数量
+dir /var/lib/redis/6379                 数据库目录
+
+内存管理
+volatile-lru                           最近最少使用(针对设置了ttl的key)
+allkeys-lru                            删除最少使用的key
+volatile-random                   在设置了ttl的key里随机移除
+allkeys-random                    随机移除key
+volatile-ttl   （minor TTL）   移除最近过期的key
+noeviction                            不删除,写满时报错
+
+选项默认设置
+maxmemory                                 最大内存
+maxmemory-policy noeviction      定义使用策略
+maxmemory-samples 5                 选取模板数据的个数(针对lru和ttl策略)

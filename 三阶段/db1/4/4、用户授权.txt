@@ -1,0 +1,41 @@
+权限列表 all 所有权限
+        select 查询权限
+        insert 插入权限......s
+grant all on db4.user2 to webadmin@"192.168.43.254" identifieed by "123456";
+   所有权限 db4库.user表  webadmin用户在43.254 ip上 可以用密码123456进行连接
+
+grant all on *.* to root@"%" identified by "123456" with gtant option;
+  所有权限  所有库表  网络中所有主机可以用root      登陆后可以再进行授权
+
+grant all on db3.* to admin@"localhost" identified by "123456";
+  所有权限  db3库所有表 用admin在本地           用密码123456进行连接
+
+mysql> select user();显示当前登陆用户与地址
+mysql> show grants;  显示访问权限
+
+--------权限撤销
+ mysql 授权库和表信息
+  -user表          存储授权用户的访问权限
+  -db表            存储授权用户对数据库的访问权限
+  -tables_priv表   存储授权用户对表的访问权限
+  -columns_priv表  存储授权用户对字段的访问权限
+
+mysql> select host,user from mysql.user;  可以查出mysql服务器上所有的授权用户与地址
+
+mysql> show grants for webadmin2@"192.168.43.%";  根据查出的用户名地址显示授权信息
+
+mysql> revoke insert ,update(uid,name) on db4.user2 from webadmin2@"192.168.43.%"; 根据查出信息
+ ------------------------------------------------------                          保留select 撤销insert update
+mysql> select user,host from mysql.user; 查询授权用户
+mysql> show grants for root@"%";      根据查出用户信息查看用户授权信息
+mysql> revoke grant option on *.* from root@"%";     撤销授权用户进行授权的功能
+
+mysql> revoke all on *.* from root@"%";  撤销授权用户所有权限
+mysql> drop user root@"%";    删除授权用户
+------------------------------------------------------------------------------------------------------------------
+授权密码修改
+mysql> grant select on *.* to u1@"%" identified by "123456";  增加新授权用户
+MySQL [(none)]> set password=password("666666");授权用户登录后修改密码
+-------------------------------------------------------------------------------------------
+mysql> set password for u1@"%"=password("123456");    数据库管理员对用户密码进行修改
+

@@ -1,0 +1,22 @@
+移除master
+[root@node2-51 ~]# redis-trib.rb check 192.168.31.51:6351 检查集群
+
+重新分片  释放57的hash槽
+[root@node2-51 ~]# redis-trib.rb reshard 192.168.31.51:6351
+ ---4096    你要移除多少个hash槽
+ ---c5ab9a21332736d05b295fc6dc78f516b1665754   接受hash槽的ID
+ ---22de8873a06a1d6f1d8acf7158cf79c68219ab11    移除谁的hash槽的ID
+ --done     还有其他吗  done结束      
+
+[root@node2-51 ~]# redis-trib.rb del-node 192.168.31.51:6351 \   删除redis集群中
+> 22de8873a06a1d6f1d8acf7158cf79c68219ab11                       ID的主机
+
+[root@node8-57 ~]# cd /var/lib/redis/6379/     ----主库hash槽被拿走所有没有数据
+dump.rdb         nodes-6357.conf  
+
+此时如果把57重新加入集群是不可以的   
+先关闭服务
+需要删除 nodes-6357.conf 这个文件
+[root@node8-57 ~]# redis-cli -h 192.168.31.57 -p 6357
+192.168.31.57:6357> cluster reset
+此时可以重新被加入集群

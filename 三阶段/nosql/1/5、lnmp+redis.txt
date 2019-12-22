@@ -1,0 +1,34 @@
+lnmp_redis  需要用到这4个包
+[root@node7-56 ~]# ls lnmp/
+nginx-1.12.2.tar.gz                 php-fpm-5.4.16-42.el7.x86_64.rpm
+php-devel-5.4.16-42.el7.x86_64.rpm  php-redis-2.2.4.tar.gz
+
+[root@node7-56 lnmp] # yum -y install gcc pcre-devel openssl-devel
+[root@node7-56 nginx-1.12.2]# ./configure --prefix=/usr/local/nginx      make && makeinstall      打开9000端口
+[root@node7-56 nginx-1.12.2]# yum -y install php php-fpm
+
+[root@node7-56 ~]# vim /usr/local/nginx/html/b.php     写一个php页面  启动php-fpm服务    浏览器访问
+<?php
+$redis = new redis();
+$redis->connect('192.168.31.50',6350);   登陆
+$redis->auth('123456');                     密码
+$redis->set('school','tarena');       
+echo $redis-> get('school');
+?>
+[root@node7-56 html]# php -m   查看php支持的模块     ##模块里没有redis 所以不能连接redis
+[root@node7-56 ~]# yum -y install autoconf automake                                  光盘自带-----|---php-redis 需要的依赖
+[root@node7-56 lnmp]# yum -y install php-devel-5.4.16-42.el7.x86_64.rpm     光盘没有-----|
+[root@node7-56 lnmp]# tar -zxvf php-redis-2.2.4.tar.gz
+[root@node7-56 lnmp]# cd phpredis-2.2.4/
+[root@node7-56 phpredis-2.2.4]# phpize     获取php信息  如果不能获取没法继续
+[root@node7-56 phpredis-2.2.4]# ls /usr/bin/php-config    需要有这个文件
+[root@node7-56 phpredis-2.2.4]# ./config --with-php-config=/usr/bin/php-config   开始配置
+[root@node7-56 phpredis-2.2.4]# make && make install 
+Installing shared extensions:     /usr/lib64/php/modules/     ##make install 时候会输出这个目录
+
+[root@node7-56 phpredis-2.2.4]# vim /etc/php.ini    -------php 程序的配置文件
+
+ 728 ; extension_dir = "./"     修改为 extension_dir = "/usr/lib64/php/modules/"   功能模块路径
+ 730 ; extension_dir = "ext"   修改为 extension = "redis.so"                       功能模块名
+[root@node7-56 ~]# systemctl restart php-fpm   重新加载配置文件
+[root@node7-56 ~]# php -m | grep  -i redis     php里有redis模块了 可以连接redis

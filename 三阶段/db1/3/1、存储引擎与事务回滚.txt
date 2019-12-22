@@ -1,0 +1,32 @@
+mysql> show engines;       查看存储引擎  与其功能 默认为innodb
+
+更改默认存储引擎
+[root@mysql13 ~]# systemctl stop mysqld  先停服务
+[root@mysql13 ~]# vim /etc/my.cnf 
+[mysqld]
+defaule-storage-engine=myisam ---新加这一条设置默认存储引擎
+validate_password_policy=0
+.....
+重启服务  默认存储引擎修改为myisam
+--------------------------------------------------------------------------------
+mysql> create table t3(name char)engine=innodb; ---常见t3表设置存储引擎为innodb
+mysql> alter table t3 engine=myisam;     把t3表中的存储引擎从innodb改为myisam
+--------------------------------------------------------------------------------
+mysql> cd /var/lib/mysql/db3   
+表名.frm (存放表结构) 表名.MYD (存放表数据) 表名.MYI(存放排队信息) ---MyISAM存储引擎
+表名.frm (存放表结构) 表名.ibd (存放数据和索引) ---innodb存储引擎
+表名.frm（存放表结构）---MEMORY存储引擎 ##数据存在内存 临时存储重启丢失
+
+innodb                           myisam
+支持行级锁定                     支持表级锁
+支持事务 事务回滚外键            不支持事务 事务回滚  -----从连接开始到断开连接的过程叫事务
+ -ibdata1                                             -----当访问过程中操作失败会回复到操作
+ -ib_logfile0 ---事务日志                              错误之前的状态
+ -ib_logfile1
+
+mysql> show status like "%lock%";   ---查看锁状态 like 模糊匹配lock
+
+mysql> show variables like "%auto%"; 查看事务开关状态
+mysql> set autocommit=off;  关闭自动提交事务 
+mysql> commit;              关闭后打完SQ命令后打commit才能确认提交
+mysql> rollback;     确认前可以使用rollback进行回滚 确认后就不可以回滚了

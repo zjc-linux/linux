@@ -1,0 +1,31 @@
+ [root@mysql51 mysql]# cat master.info  ---显示主库信息
+18
+master50.000001
+1436
+192.168.43.50
+repluser
+123456
+3306
+60
+0
+
+[root@mysql51 mysql]# cat relay-log.info  ---中继日志信息
+
+./mariadb-relay-bin.000002
+1575
+master50.000001
+1436
+
+[root@mysql51 mysql]# cat mariadb-relay-bin.index ---中继日志索引文件
+./mariadb-relay-bin.000001
+./mariadb-relay-bin.000002
+
+[root@mysql51 mysql]# mysqlbinlog mariadb-relay-bin.000001 中继日志  里面记录binlog日志
+-----------------------------------------------------------------------------------------
+[root@mysql51 mysql]# rm -rf master.info mariadb-relay-bin.* relay-log.info --删除所有中继文件
+
+ 重启服务
+登录查询
+MariaDB [(none)]> show slave status;
+Empty set (0.00 sec)    ----已经还原
+

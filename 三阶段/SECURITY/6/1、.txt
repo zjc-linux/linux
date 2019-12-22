@@ -1,0 +1,18 @@
+把zabbix改为 主动监控
+[root@zabbixclient_web2 ~]# vim /usr/local/etc/zabbix_agentd.conf
+ Server=127.0.0.1,192.168.43.50   把改行注释
+ StartAgents=0    改行设置为0
+ ServerActive=192.168.43.50    允许那些主机监控本机  一定要取消127.0.0.1
+
+[root@zabbixclient_web2 ~]# killall zabbix_agentd  杀死zabbix进程
+[root@zabbixclient_web2 ~]# zabbix_agentd     启动后ss查不到服务
+
+
+
+安装nginx  需要--with-http_stub_status_module  
+[root@zabbixclient_web1 nginx-1.12.2]# vim /usr/local/nginx/conf/nginx.conf    修改配置文件
+......
+        location /status {
+                stub_status on;
+}
+......

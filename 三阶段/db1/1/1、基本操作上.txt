@@ -1,0 +1,36 @@
+准备 mysql-5.7.17.tar 包                                                                       忽略依赖卸载
+[root@mysql13 ~]# rpm -qa mriadb        查询maria提供命令的安装包是否安装--|----有的话卸载rpm -e nodeps mariadb
+[root@mysql13 ~]# rpm -qa mriadb-server 查询maria提供服务的安装包是否安装--|              rpm -e nodeps mariadb
+[root@mysql13 ~]# rm -rf /etc/my.cnf
+[root@mysql13 ~]# rm -rf /var/lib/mysql/*
+[root@mysql13 ~]# tar -xf mysql-5.7.17.tar
+[root@mysql13 ~]# yum -y install perl-JSON
+                  rpm -Uvh mysql-community-*.rpm
+                  rpm -qa | grep -i mysql
+                  rm -rf *.rpm 
+[root@mysql13 ~]# systemctl start mysqld     启动服务第一次会初始化
+[root@mysql12 ~]# ls /var/lib/mysql 第一次启动前这个目录下没有文件 第一次启动后会生成文件 ---数据库目录
+                  /etc/my.cnf   ------------------------------------------------------------主配置文件
+
+[root@mysql13 ~]grep password /var/log/mysqld.log  ------------------------第一次登陆需要查询初始密码
+2019-10-11T16:49:13.364394Z 1 [Note] A temporary password is generated for root@localhost: s*j-tz0u/dlK
+                                                                                           s*j-tz0u/dlK 为密码
+[root@mysql13 mysql]# mysql -hlocalhost -uroot -p's*j-tz0u/dlK'
+               mysql -h数据库服务器ip地址 -u用户名 -p密码        初始密码不能进行操作第一次需要修改密码
+
+mysql> alter user root@'localhost' identified by "123qqq...A";   修改密码  密码需要符合复杂度才可以
+-------------------------------------------------------------------------------------------------------------------
+数据库基本使用：
+1、修改密码策略
+mysql> show variables like '%password%';   查询数据库密码策略
+
+mysql> set global validate_password_length=6; 修改策略要求密码位数     ----|-------这样是临时生效永久需要写进配置文件
+mysql> set global validate_password_policy=0; 修改策略要求密码困难级别 ----|
+[root@mysql13 ~]# vim /etc/my.cnf -------写进配置文件
+[mysqld]
+validate_password_policy=0
+validate_password_length=6
+2、把数据存储到数据库服务器的过程
+mysql> create database aadb;        ------新创建一个库
+[root@mysql13 ~]# ls /var/lib/mysql ------新建库会在这个目录下生成一个目录
+aadb

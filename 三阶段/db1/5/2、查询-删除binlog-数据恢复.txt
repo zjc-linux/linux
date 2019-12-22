@@ -1,0 +1,19 @@
+mysql> show master status;   ----查询当前正在使用的binlog日志
+
+mysql> purge master logs to "zjc.000003";  ---删除 3 之前的binlog日志 也就是1 2 
+
+mysql> reset master; 删除所有binlog日志并从1开始
+
+ mysqlbinlog [选项] binlog日志名
+       --start-datetime="yyyy-mm-dd hh:mm:ss"
+       --stop-datetime="yyyy-mm-dd hh:mm:ss"
+       --start-position=数字  ###数字为偏移量
+       --stop-position=数字
+
+数据恢复
+1、mysql> drop table db4.t2;   删除t2表
+2、[root@mysql13 logdir]# mysqlbinlog zjc.000001 | grep -i drop  可以查询有几次删除操作
+3、[root@mysql13 logdir]# mysqlbinlog zjc.000001   ---查看binlog日志的偏移量  3225
+4、[root@mysql13 logdir]# mysql -uroot -p123456 db4 < /root/db4_t2.sql   先使用完全备份恢复数据
+5、[root@mysql13 logdir]# mysqlbinlog --stop-position=3225 /logdir/zjc.000001 |mysql -uroot -p123456 使用日志恢复增量
+
