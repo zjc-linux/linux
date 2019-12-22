@@ -1,0 +1,8 @@
+vim /etc/php-fpm.d/www.conf
+[www]
+listen = 127.0.0.1:9000 php-fpm     地址与端口
+listen.allowed_clients = 127.0.0.1  只允许谁访问
+pm.max_children = 50                最大进程数量
+pm.start_servers = 5                最小进程数量
+pm.min_spare_servers = 5            最少需要几个空闲着的进程
+pm.max_spare_servers = 35           最低允许几个进程处于空闲状态

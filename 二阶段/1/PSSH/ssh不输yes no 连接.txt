@@ -1,0 +1,1 @@
+    ssh -o StrictHostKeyChecking=no 192.168.0.12  直接连接不用输yes no

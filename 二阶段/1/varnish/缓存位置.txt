@@ -1,0 +1,6 @@
+  varnishd -f /usr/local/etc/default.vcl  默认放内存       存硬盘需要文件名
+
+  varnishd -s malloc,128M  定义varnish使用内存作为缓存，空间为128M
+  
+  varnishd -s file,/var/lib/varnish_storage.bin,1G 定义varnish使用文件作为缓存
+  

@@ -1,0 +1,7 @@
+ mkdir /var/ftp
+ mount /dev/sdb1 /var/ftp
+ yum -y install vsftpd
+ 开始匿名上传和创建目录
+ #anon_upload_enable=YES
+ #anon_mkdir_write_enable=YES
+ chmod 777 /var/ftp/pub

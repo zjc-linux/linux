@@ -1,0 +1,6 @@
+location上面加一句话
+
+if ($http_user_agent ~* curl) {        http_user_agent为nginx自带的一个变量可以显示访问所用的浏览器变量名字很长所以用波浪线模糊匹配
+
+ rewrite ^/(.*) /firefox/$1;      if判断如果用的是curl就会跳转到firefox目录下 （.*）保留     $1调用保留
+}

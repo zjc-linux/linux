@@ -1,0 +1,24 @@
+   如果虚拟机全部关机了  查看一些ceph -s
+   如果服务没起来可以
+   systemctl start ceph\*.service
+   systemctl start ceph\*.target
+
+   systemctl status ceph-mon@node1 查看node1节点状态
+   ll /dev/sdb1  ----------重启后 权限会改变
+   brw-rw---- 1 root disk 8, 17 Oct  9 11:09 /dev/sdb1 ----不修改权限 target服务会起不来
+   [root@node1 /]# ps -aux | grep ceph
+ceph       2247  0.2  2.4 345692 24188 ?        Ssl  07:10   0:02 /usr/bin/ceph-mon -f --cluster ceph --id node1 --setuser ceph --setgroup ceph
+ceph       3057  0.4  2.7 879500 27128 ?        Ssl  07:16   0:02 /usr/bin/ceph-osd -f --cluster ceph --id 0 --setuser ceph --setgroup ceph
+ceph       3510  0.3  2.6 878988 26804 ?        Ssl  07:16   0:02 /usr/bin/ceph-osd -f --cluster ceph --id 1 --setuser ceph --setgroup ceph
+root       3937  0.0  0.0 112660   972 pts/0    R+   07:25   0:00 grep --color=auto ceph
+--------------------------------------------------------------------------------------------------------------------
+[root@mysql52 ~]# ls /var/lib/ceph/osd/
+ceph-4  ceph-5       可以看到osd节点的id号 即4 5
+
+
+    
+[root@mysql52 ~]# /usr/bin/ceph-mon -f --cluster ceph --id mysql52 --setuser ceph --setgroup ceph &  ---|
+[root@mysql52 ~]# /usr/bin/ceph-osd -f --cluster ceph --id 4 --setuser ceph --setgroup ceph &        ---|--启动服务
+[root@mysql52 ~]# /usr/bin/ceph-osd -f --cluster ceph --id 5 --setuser ceph --setgroup ceph &        ---|
+
+---------------------------------------------------------------------------------------------------------------------

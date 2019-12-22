@@ -1,0 +1,3 @@
+nginx 默认访问日志文件    /usr/local/nginx/logs/access.log
+nginx 默认错误日志文件    /usr/local/nginx/logs/erroe.log
+php   默认错误日志文件为  /var/log/php-fpm/www.error.log

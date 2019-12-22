@@ -1,0 +1,8 @@
+源码装nginx需要依赖包 gcc prre-devel  openssl-devel
+./configure \
+--prefix=/安装位置\    可以指定安装位置
+--user=nginx \         创建用户
+--group=nginx \        创建用户名
+--with-http_ssl_module 启用加密 
+
+启动/usr/local/nginx/sbin/nginx  启动前需要为nginx创建nginx用户与组 useradd -s /sbin/nologin nginx

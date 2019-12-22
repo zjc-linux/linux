@@ -1,0 +1,36 @@
+global_defs {                                              |global_defs {   
+   notification_email {                                    |   notification_email {  
+     acassen@firewall.loc                                  |     acassen@firewall.loc 
+     failover@firewall.loc                                 |     failover@firewall.loc  
+     sysadmin@firewall.loc                                 |     sysadmin@firewall.loc
+   }                                                       |   }
+   notification_email_from Alexandre.Cassen@firewall.loc   |   notification_email_from Alexandre.Cassen@firewall.loc
+   smtp_server 192.168.200.1                               |   smtp_server 192.168.200.1
+   smtp_connect_timeout 30                                 |   smtp_connect_timeout 30
+   router_id web1---------------------                     |   router_id web2-------------------------
+   vrrp_skip_check_adv_addr                                |   vrrp_skip_check_adv_addr
+   vrrp_strict                                             |   vrrp_strict
+   vrrp_garp_interval 0                                    |   vrrp_garp_interval 0 
+   vrrp_gna_interval 0                                     |   vrrp_gna_interval 0
+}                                                          |}
+                                                           |
+vrrp_instance VI_1 {                                       |vrrp_instance VI_1 { 
+    state MASTER------------------------                   |    state BACKUP------------------------------
+    interface ens33------------------------                |    interface ens33--------------------
+    virtual_router_id 51-----------------------------------|    virtual_router_id 51------------------------------
+    priority 100------------------------------------------ |    priority 50------------------------------------------  
+    advert_int 1                                           |    advert_int 1 
+    authentication {                                       |    authentication {
+        auth_type PASS                                     |        auth_type PASS 
+        auth_pass 1111 ------------------------------      |        auth_pass 1111----------------------------------
+    }                                                      |    }
+    virtual_ipaddress {                                    |    virtual_ipaddress {
+        192.168.43.80/24  ---------------------------------|        192.168.43.80/24------------------------------- 
+    }                                                      |    }   
+}                                                          |}
+            WEB1                                                         WEB2
+
+每次打开keepalived时候会打开iptables防火墙    ### iptables -F 可以清除防火墙
+[host]# ip a s  ip也是可以配置网络的命令keepalived后台使用的ip命令配置VIP 
+  ### ip a s可以查看网卡信息
+  ### ip a s的配置信息 ifconfig 是查看不到的

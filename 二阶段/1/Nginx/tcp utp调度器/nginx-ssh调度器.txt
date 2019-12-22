@@ -1,0 +1,16 @@
+   nginx调度器  IP 192.168.43.10
+ 安装stream模块
+
+ stream {
+  upstream myssh {       定义集群
+    server 192.168.43.12:22;
+    server 192.168.43.13:22;
+  }
+  server {
+  listen 12345;          定义端口
+  proxy_pass myssh;      访问nginx调度器时候调用集群
+  }
+}
+   访问 
+       ssh -p 12345 192.168.43.10
+       登陆stream 集群内定义的服务器    轮询

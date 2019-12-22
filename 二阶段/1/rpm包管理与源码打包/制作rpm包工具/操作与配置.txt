@@ -1,0 +1,47 @@
+  rpmbuild -ba xx.spec   -ba后跟一个不存在的文件或目录让其报错
+
+  #ls
+  #rpmbuild   报错会生成这个目录里面有6个目录
+  BUILD  BUILDROOT  RPMS  SOURCES  SPECS  SRPMS
+
+  cp lnmp_soft/nginx-1.12.2.tar.gz /root/rpmbuild/SOURCES/ 把源码包拷贝到SOURCES目录
+
+  cd /root/rpmbuild/SPECS
+  ls ./  查看是否为空
+  
+  vim nginx.spec  为空后为nginx创建文件 扩展名必须为spec 只有后缀为spec文件里才会有内容
+
+  Name:                           |     nginx     一般是软件名字
+Version:                          |     1.12.2       不能瞎写会去SOURCES查找
+Release:        1%{?dist}         |     第几次把源码打包成rpm 可以随便写 1
+Summary:                          |     描述信息 随便写
+                                  |
+Group:                            |     要不要属于组包 可以注释掉
+License:                          |     协议不重要  可以写GPL 开源协议
+URL:                              |     网址随便写
+Source0:                          |     必须与打包名一样 nginx-1.12.2.tar.gz
+                                  |
+BuildRequires:                    |     注释 有无依赖
+Requires:                         |     注释 有无依赖
+                                  |
+%description                      |     详细描述 随便写
+                                  |
+                                  |#####软件一般需要创建一个软件用户需要手动添加安装好操作(脚本) %post     
+%prep                             |############################################################  useradd nginx    
+%setup -q                         |     自动解压源码包，并cd进去  
+                                  |
+                                  |
+%build                            |
+%configure                        |     选择软件模块与安装位置 需要起码修改%configure 为./configure #--user=nginx
+make %{?_smp_mflags}              |     
+                                  |
+                                  |
+%install                          |
+make install DESTDIR=%{buildroot} |     避免软件真的执行安装到/usr/local/nginx 会让软件装到/root/rpmbuild/BUILDROOT下
+                                  |让软件以为/root/rpmbuild/BUILDROOT为根
+                                  |
+%files                            |     
+%doc                              |
+                                  |     源码安装后打包那些为rpm包/usr/local/nginx/*
+ 
+ 

@@ -1,0 +1,8 @@
+
+
+  cd µ½ lnmp_soft
+  
+   tar -xf apche-tomcat-8
+  
+   mv   apche-tomcat-8  /usr/local/tomcat
+

@@ -1,0 +1,37 @@
+udevadm info --query=path --name /dev/sdc                   查询实际位置|
+udevadm info --query=property --path=/block/sdc             查询基本属性|
+udevadm info --query=all --attribute-walk --path=/block/sdc 查询所有信息|
+________________________________________________________________________|
+1、简单尝试  (使用查询所有信息查询出来的U盘基本信息)
+vim /etc/udev/rules.d/70-usb.rules    (70-usb.rules名字随便后缀需要用.rules)
+SUBSYSTEMS=="usb",ATTRS{manufacturer}=="Kingston",RUN+="/usr/bin/wall weloacme"  (根据上三条命令查询U盘数据填写)
+只要你是u盘   ，  只要品牌是金士顿                执行广播命令 发送weloame (多个只要中间 逗号 隔开) 
++=不覆盖原来动作，=只执行
+
+拍错日志 查看/var/log/messages
+_______________________________________________________________________________________________________________________
+2、动作为插入特定优盘是执行
+vim /etc/udev/rules.d/70-usb.rules
+ACTION=="add",ENV{DEVTYPE}=="partition",ENV{ID_VENDOR}=="Kingston",ENV{ID_SERIAL_SHORT}=="D067E51599A7F281F608D557"
+,SYMLINK+="usb%n"
+
+##如果动作是插入  如果是分区                如果品牌是金士顿               如果U盘的序列号为... 那么链接名字叫usb%n
+###这个规则是用查询基本属性的命令查出来的不完全查出来的数据需要用 `ENV{查询数据}=="查询数据"` 进行匹配
+#ll /dev/usb1      可以使用 /dev/usb1进行挂载
+#lrwxrwxrwx 1 root root 4 Sep 28 07:45 /dev/usb1 -> sdc1
+________________________________________________________________________________________________________________________
+3、修改属主与权限(与实验2基本一样)
+vim /etc/udev/rules.d/70-usb.rules
+ACTION=="add",ENV{DEVTYPE}=="partition",ENV{ID_VENDOR}=="Kingston",ENV{ID_SERIAL_SHORT}=="D067E51599A7F281F608D557",
+SYMLINK+="usb%n",OWNER="zjc",GROUP="zjc",MODE="600"
+
+#前方条件匹配后 那么  OWNER(属主为)，GROUP(属组为)，MODE(权限为)
+#ll /dev/sdc1
+#brw------- 1 zjc zjc 8, 33 Sep 28 08:12 /dev/sdc1
+—————————————————————————————————————————————————————————
+4、插U盘起服务，拔出U盘停止服务
+vim /etc/udev/rules.d/70-usb.rules
+ACTION=="add",ENV{ID_SERIAL_SHORT}=="D067E51599A7F281F608D557",RUN+="/usr/bin/systemctl start httpd"
+ACTION=="remove",ENV{ID_SERIAL_SHORT}=="D067E51599A7F281F608D557",RUN+="/usr/bin/systemctl stop httpd"
+#如果动作为插入或拔出，如果U盘的序列号为...， 执行系统程序systemctl 启动或关闭 httpd
+#如果只想启动 或关闭可以只写其中一条规则 

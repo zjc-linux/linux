@@ -1,0 +1,5 @@
+http {
+client_header_buffer_size 1k;      默认请求包头信息的缓存
+large_client_header_buffers 4 4k;   最大请求包头信息的缓存个数与数量
+......
+｝

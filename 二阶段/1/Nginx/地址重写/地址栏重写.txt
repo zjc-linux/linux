@@ -1,0 +1,6 @@
+写在location 上面
+
+rewrite /a.html  b.html    在192.168.43.10上访问a.html 直接跳转到b.html
+rewrite ^/ http://baidu.com  访问192.168.43.10 直接跳转到百度
+rewrite ^/(.*) http://www.baidu.com/$1;  访问192.168.43.10/任意 直接跳转到www.baidu.com/任意
+      (.*)是保留访问的文件    $1把这个保留的文件复制到跳转的地址下    

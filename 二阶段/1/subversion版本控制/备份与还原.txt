@@ -1,0 +1,6 @@
+仓库备份
+       svnadmin dump /var/svn/project > my.bak
+
+
+还原   svnadmin  create /var/svn/project1  创建新仓库
+       svnadmion load /var/svn/project1 < my.bak   导入新仓库

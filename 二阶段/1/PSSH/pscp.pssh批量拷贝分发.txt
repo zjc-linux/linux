@@ -1,0 +1,5 @@
+ pscp.pssh
+
+ pscp.pssh  -h host.txt   xxx.txt       /
+             ¿½±´¸øË­    ¿½±´Ë­    ¿½±´µ½ÄÄÀï
+ 

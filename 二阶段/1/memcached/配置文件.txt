@@ -1,0 +1,5 @@
+主配置文件
+   /usr/lib/systemd/system/memcached.service
+ 
+变量文件
+   /etc/sysconfig/memcached

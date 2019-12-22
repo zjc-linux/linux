@@ -1,0 +1,8 @@
+ http{
+ ....
+ gzip on;                     开启压缩 
+ gzip_min_length 1000;       小文件不压缩
+ gzip_comp_level 4;          压缩比例  比例越高效果越好CPU占用越大
+ gzip_types text/plain text/css application/json application/x-javascript text/xml ; 对特定文件压缩 
+ ...
+ }

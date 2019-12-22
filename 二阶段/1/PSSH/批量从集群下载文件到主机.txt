@@ -1,0 +1,6 @@
+ pslurp     -h /root/host.txt -L /media              /etc/passwd                 /pass
+ 
+ 固定命令 -h(指定host文件)    -L 指定下载到主机目录  下载集群组件的什么文件     下载后放在主机media下/叫pass
+
+ cat /media/iptables/pass 
+ cat /media/lnmp/pass

@@ -1,0 +1,10 @@
+ 1.没有test.php
+  file not found 
+ 2.nginx+php 没有启动
+  无法连接
+  An error
+ 3.test.php[语法]
+  空白
+ 4.下载（location动静分离）
+  LNMP(nginx+php) Mysql
+  写脚本，写代码链接数据库，增删改查

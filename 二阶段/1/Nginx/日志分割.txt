@@ -1,0 +1,9 @@
+进入nginx日志目录
+
+  cd /usr/local/nginx/logs/
+ 
+  修改日志名字   看日志文件增长情况 一般达到100M就分割
+  mv access.log access-`date +%Y%m%d`.log
+  mv erroe.log   erroe-`date +%Y%m%d`.log
+  
+  kill -USR1 $(cat /usr/local/nginx/logs/nginx.pid)  通知nginx以前的日志文件不能用了 会生成新的

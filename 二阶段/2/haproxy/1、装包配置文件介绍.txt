@@ -1,0 +1,81 @@
+#echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.conf 开启路由转发
+#sysctl -p
+#yum -y install haproxy
+------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------
+#vim  /etc/haproxy/haproxy.cfg
+global
+    # to have these messages end up in /var/log/haproxy.log you will
+    # need to:
+    #
+    # 1) configure syslog to accept network log events.  This is done
+    #    by adding the '-r' option to the SYSLOGD_OPTIONS in
+    #    /etc/sysconfig/syslog
+    #
+    # 2) configure local2 events to go to the /var/log/haproxy.log
+    #   file. A line like the following can be added to
+    #   /etc/sysconfig/syslog
+    #
+    #    local2.*                       /var/log/haproxy.log
+    #
+    log         127.0.0.1 local2
+
+    chroot      /var/lib/haproxy--------------------工作目录
+    pidfile     /var/run/haproxy.pid----------------haproxy的pid存放路径
+    maxconn     4000   -------------------------------最大连接数，，默认4000                    
+    user        haproxy
+    group       haproxy
+    daemon---------------------------------------------创建1个进程进入daemon模式运行(后台)
+
+    # turn on stats unix socket
+    stats socket /var/lib/haproxy/stats
+
+#---------------------------------------------------------------------
+# common defaults that all the 'listen' and 'backend' sections will
+# use if not designated in their block
+#---------------------------------------------------------------------
+defaults
+    mode                    http-----------默认模式mode {tcp|http|health}#health健康检查
+    log                     global
+    option                  httplog---------日志类别http日志格式
+    option                  dontlognull----不记录健康检查的日志信息
+    option http-server-close------------------每次请求完毕后主动关闭http通道
+    option forwardfor       except 127.0.0.0/8---后端服务器可以从Http Header中获得客服端
+    option                  redispatch-真实服务器挂掉后强制定向到其他健康服务器
+    retries                 3----------------3次连接失败就认为服务器不可用
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s-----如果backend没有指定，默认为10s
+    timeout client          1m--------客服端连接超时
+    timeout server          1m--------服务器连接接超时
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000------最大连接数
+
+#---------------------------------------------------------------------
+# main frontend which proxys to the backends
+#---------------------------------------------------------------------
+frontend  main *:5000
+    acl url_static       path_beg       -i /static /images /javascript /stylesheets
+    acl url_static       path_end       -i .jpg .gif .png .css .js
+
+    use_backend static          if url_static
+    default_backend             app
+
+#---------------------------------------------------------------------
+# static backend for serving up images, stylesheets and such
+#---------------------------------------------------------------------
+backend static
+    balance     roundrobin
+    server      static 127.0.0.1:4331 check
+
+#---------------------------------------------------------------------
+# round robin balancing between the various backends
+#---------------------------------------------------------------------
+backend app
+    balance     roundrobin
+    server  app1 127.0.0.1:5001 check
+    server  app2 127.0.0.1:5002 check
+    server  app3 127.0.0.1:5003 check
+    server  app4 127.0.0.1:5004 check
+

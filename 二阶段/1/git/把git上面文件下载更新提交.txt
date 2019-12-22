@@ -1,0 +1,20 @@
+   git clone https://github.com/zjc-linux/bj
+
+   git clone https://github.com/帐号名称/仓库名称
+ #clone指令用于将服务器仓库中的资料打包下载到本地
+
+ cd 从仓库名称
+ 
+ 任意修改文件或创建新文件
+
+ git add . #add增添新文件
+
+ git commit -m "test"
+
+ git push
+
+ commit和push实现提交代码的功能
+
+ git pull
+
+ pull更新 类似于svn update

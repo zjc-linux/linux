@@ -1,0 +1,3 @@
+  pnuke -h       host.txt           sleep
+
+  从主机执行  批量杀死host文件   模糊查杀  跟sleep相关全部杀死

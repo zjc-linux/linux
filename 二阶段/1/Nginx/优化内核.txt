@@ -1,0 +1,10 @@
+  并发量
+  
+  
+ulimit -a           查看所有
+ulimit -Hn  100000  设置硬限制 最大 相当于硬件极限值得设置 （临时） 
+ulimit -Sn  100000  设置软限制 超过警告                    （临时）
+ 
+ vim /etc/security/limits.conf       永久配置
+ *   soft nofile  100000   软限制      
+ *   hard nofile  100000   硬限制

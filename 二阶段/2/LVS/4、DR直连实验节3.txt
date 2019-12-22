@@ -1,0 +1,24 @@
+网卡配置完成后 在配置了环回网卡的web服务器修改配置
+
+ vim /etc/sysctl.conf
+ #手写如下四行内容
+ net.ipv4.conf.all.arp_ignore = 1  如果别人给我arp包 那么我忽略
+ net.ipv4.conf.lo.arp_ignore = 1   如果别人给我arp包 那么我忽略
+ net.ipv4.conf.lo.arp_announce = 2  
+ net.ipv4.conf.all.arp_announce = 2
+
+#当有arp广播问谁是192.168.43.15时，本机忽略该arp广播，不做任何回应
+#本机不要向外宣告自己的lo回环地址是192.168.43.15
+
+sysctl -p 修改完配置不能立即生效这个命令可以重读配置文件
+重启网卡 systemctl restart network
+
+ipvsadm -A -t 192.168.43.15:80 -s wrr  
+ ipvsadm -a -t 192.168.43.15:80 -r 192.168.43.12 -g
+ ipvsadm -a -t 192.168.43.15:80 -r 192.168.43.13 -g
+需要的话可以保存 ipvsadm-save -n /etc/sysconfig/ipvsadm
+
+在客户机访问 curl http://192.168.43.15
+
+ 
+ 

@@ -1,0 +1,27 @@
+ vim  /var/svn/project/conf/svnserve.conf   
+大概修改文件 19 20 27 34行 需要顶满格不要在开头出现空格
+  
+19  anon-access = read       修改为anon-access = none
+  19意思 匿名用户默认可以下载   none   匿名用户无权限
+20  auth-access = write
+  20意思 经过帐号密码验证的可以读写
+27  password-db = passwd
+  27意思 需要修改第二个配置文件名 存放用户密码
+34  authz-db = authz 给特殊目录设置特殊权限
+  34意思 需要修改第三个配置文件名 
+
+vim /var/svn/project/passwd   书写用户与密码
+# harry = harryssecret
+harry = 123456
+tom = 123456
+
+vim .var.svn.project/authz  为目录设置特殊权限
+[/]     这个根指的是仓库的根
+tom = rw
+harry = rw
+[/test]
+tom = rw
+harry = r
+[/xyz]
+tom = r
+* =

@@ -1,0 +1,11 @@
+yum -y install htpasswd httpd-tools 用于生成验证文件
+
+vim /usr/local/nginx/conf/nginx.conf 
+  server {
+       ...
+       auth_basic "任意";    双引号里写什么 网站用户验证框就会出现什么
+       auth_basic_user_file "/usr/local/nginx/pass";   
+    ｝
+   pass不能自己创建
+   htpasswd -c /usr/local/nginx/pass  用户名        第一个创建的需要-c选项
+   htpasswd  /usr/local/nginx/pass 用户名            第二个用户可以直接生成

@@ -1,0 +1,19 @@
+  避免访问调度器调到每个集群组件服务器时 都需要输入一次帐号密码   
+  解决办法  创建公共 存储
+
+  登陆缓存信息
+  默认放在/var/lib/php/session
+
+  在集群组件服务器上修改 配置文件
+  vim /etc/php-fpm.d/www.conf
+ 
+  配置文件最后两行
+
+  原配置
+  php_value[session.save_handler] = files                            存本地
+  php_value[session.save_path] = /var/lib/php/session                存放位置
+
+  修改配置
+  php_value[session.save_handler] = memcache
+  php_value[session.save_path] =  "tcp://192.168.43.10:11211"
+

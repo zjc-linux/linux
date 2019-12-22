@@ -1,0 +1,11 @@
+  rpmbuild -ba nginx.spec
+
+  此时配置文件写完可以执行 没有错误
+
+  #cd /root/rpmbuild/RPMS/x86_64
+  #ls ./
+       nginx-1.12.2-1.x86_64.rpm             自制rpm包
+       nginx-debuginfo-1.12.2-1.x86_64.rpm   排错包
+
+  #rpm -ivh  nginx-1.12.2-1.x86_64.rpm 
+  #rpm -qi nginx 描述信息

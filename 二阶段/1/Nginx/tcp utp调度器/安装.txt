@@ -1,0 +1,19 @@
+nginx 版本至少需要1.9或以上版本支持
+版本不够可以选择升级或者重新安装
+我选择升级
+cd /usr/local/nginx/sbin
+     mv nginx nginxold
+cd nginx-1-12
+./configure \
+ --prefix=/usr/local/nginx \
+ --user=nginx \
+ --group=nginx \
+ --with-http_ssl_module \
+ --with-stream              最重要的是这个模块可以调用utp tcp
+ make         make后会生成objs目录
+ cd objs  
+ cp nginx  /usr/local/nginx/sbin/
+ cd nginx-1-12
+ make upgrade
+ 完成
+ nginx -V 可以查看安装模块与版本

@@ -1,0 +1,18 @@
+  默认情况下
+ catalina  软件状况日志
+
+ localhost  本地主机日志
+
+
+  可以手动添加网络主机的日志
+    <host>      
+    
+   之间有三句话
+   </host>
+   
+   <host>
+ <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"    （directory 日志放在了哪里）
+               prefix="localhost_access_log" suffix=".txt"    prefix=文件名  suffix=扩展名
+               pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+
+ </host>

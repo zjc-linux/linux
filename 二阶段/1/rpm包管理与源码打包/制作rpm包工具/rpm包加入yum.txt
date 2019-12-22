@@ -1,0 +1,22 @@
+   安装createrepo软件
+   yum -y install createrepo
+
+   #mv /root/nginx-1.12.2-1.x86_64.rpm /var/ftp/b
+  
+   #cd /var/ftp/b
+   
+   #createrepo .
+    生成清单文件
+   #vim /etc/repo.d/b.repo
+   修改配置文件测试
+  [b]                         |  [b] 
+name=b                        |name=b
+gpgcheck=0                    |gpgcheck=0
+enabled=1                     |enabled=1
+baseurl=ftp://192.168.43.10/a |baseurl=ftp://192.168.43.10/b
+
+ yum clean all && yum repolist
+
+ 显示有一个包 
+ yum -y install nginx 
+ 测试结束

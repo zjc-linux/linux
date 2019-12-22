@@ -1,0 +1,46 @@
+                  |-------------------------node1
+                  |                     ens33:192.168.3.11/24
+                  |
+                  |
+                  |
+client--------------------------------------node2
+                  |                     ens33:192.168.3.12/24
+                  |
+                  |
+                  |
+                  |-------------------------node3
+                                        ens33:192.168.3.13/24
+
+## mount -o loop rhcs2.0-rhosp9-20161113-x86_64.iso /var/ftp/ceph/ 挂载镜像为ceph服务器配置额外Yum源 client node1 2 3
+## vim b.repo
+[MON]
+name=a
+gpgcheck=0
+enabled=1
+baseurl=ftp://192.168.3.254/ceph/rhceph-2.0-rhel-7-x86_64/MON
+[OSD]
+name=b
+gpgcheck=0
+enabled=1
+baseurl=ftp://192.168.3.254/ceph/rhceph-2.0-rhel-7-x86_64/OSD
+[Tools]
+name=c
+gpgcheck=0
+enabled=1
+baseurl=ftp://192.168.3.254/ceph/rhceph-2.0-rhel-7-x86_64/Tools
+ 修改hosts ## vim /etc/hosts
+192.168.3.254 room
+192.168.3.10 client
+192.168.3.11 node1
+192.168.3.12 node2
+192.168.3.13 node3
+[root@node1 ]## ssh-keygen 生成秘钥 然后分发给所有主机(包括自己)---------------------------------------------------
+  配置NTP时间同步--------------------------------------------------------------------------------------------------
+[root@yum]# yum -y install chrony  真机配置时间同步
+[root@yum]# vim /etc/chrony.conf
+server 0.centos.pool.ntp.org iburst
+allow 192.168.3.0/24
+local stratum 10
+[root@node1] vim /etc/chrony.conf 节点和client与真机同步
+server 192.168.43.254 iburst
+  -----为每一个node节点加3块磁盘 

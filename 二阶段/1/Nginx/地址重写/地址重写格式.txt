@@ -1,0 +1,11 @@
+地址重写格式
+
+rewrite 旧地址 新地址；
+
+last 不再读其他rewrite
+
+break 不在读其他语句，结束请求
+
+redirect 临时重定向
+
+permament 永久重定向

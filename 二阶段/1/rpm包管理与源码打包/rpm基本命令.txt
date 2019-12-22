@@ -1,0 +1,9 @@
+  rpm -ivh 安装
+    
+  rpm -qa  查所有
+
+  rpm -ql  软件文件列表
+
+  rpm -e   卸载
+ 
+  rpm -qi  查软件信息

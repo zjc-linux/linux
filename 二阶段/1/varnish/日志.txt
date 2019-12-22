@@ -1,0 +1,2 @@
+   varnishilog       软件日志
+   varnishncsa       访问日志

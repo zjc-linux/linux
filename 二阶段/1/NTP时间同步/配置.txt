@@ -1,0 +1,18 @@
+ 做服务器
+ vim /etc/chrony.conf 
+ 大概在26行
+ allow 192.168.0.0/24    允许那个网段连接
+ #deny  192.168.2.0/24   拒绝那个网段连接
+
+ local stratum 10   不能超过15层 大概在29行 可以写1-15
+
+ systemctl restart chronyd
+
+
+ 客服端
+ vim /etc/chrony.conf
+
+ #server 0.centos.pool.ntp.org iburst
+ #server 1.centos.pool.ntp.org iburst
+ #server 2.centos.pool.ntp.org iburst
+ server ntp1.aliyun.com iburst   ##ntp1.aliyun.com 为时间同步服务器域名或IP

@@ -1,0 +1,2 @@
+                     # cd /root/lnmp_soft
+ [root@yum lnmp_soft]# yum -y install pssh-2.3.1-5.el7.noarch.rpm

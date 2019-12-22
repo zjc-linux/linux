@@ -1,0 +1,13 @@
+依赖包gcc pcre-devel openssl-devel
+./configure \
+--prefix=/usr/local/nginx
+--user=nginx
+--group=nginx
+--with-http_ssl_module
+make 不要make install
+cd /usr/local/nginx/sbin
+mv nginx nginxpld 修改旧脚本
+
+cd nginx-1-12.2/objs/  make 后会生成objs
+cp nginx /usr/local/nginx/sbin/ 拷贝新脚本
+ make upgrade

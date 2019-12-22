@@ -1,0 +1,5 @@
+svnserve -d -f /var/svn/project     -d是起来后放后台   
+                                    -r是指定共享那个目录
+
+  ss -nultp | grep svn  
+  端口是3690

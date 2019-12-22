@@ -1,0 +1,4 @@
+for i in `ls /etc/*.conf`
+do 
+mu5sum $i > a.log
+done

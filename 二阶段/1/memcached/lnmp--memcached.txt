@@ -1,0 +1,7 @@
+ 
+ lnmp 与memcache连接需要有个包   php-pecl-memcache
+
+  yum -y install php-pecl-memcache
+
+  重启 php-fpm
+  systemctl restart php-fpm

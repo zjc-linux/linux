@@ -1,0 +1,12 @@
+  mkdir  /var/svn
+  svnadmin create /var/svn/project     project这个名字无所谓 随便建 
+  du -sh  目录  查看大小
+
+  本地导入初始化数据
+  cd  到初始化文件存放地方
+
+  cd /var/lib/systemd/system
+
+  ls -R | wc -l 计数
+
+  svn import  . file:///var/svn/project -m "注释"  .代表当前目录

@@ -1,0 +1,34 @@
+1.修改不同文件，不同行    初始版本6     无所谓各自提交各自的
+[pc12]#sed -i "3a tom"    tmp.mount     
+      #svn ci -m "xx"
+      #版本7
+      #svn update    获得pc13修改文件
+
+[pc13]#sed -i "3a harry"  umount.target
+      #svn ci -m "xx"
+      #版本8
+      #svn update    获得pc12修改文件
+2.修改相同文件，不同行
+[pc12]#sed -i "3a tom" user.file
+      #svn ci -m "xx"
+      #版本9
+[pc13]#sed -i "6a harry" user.file
+      #svn ci -m "xx"       上传失败提示过期 手里的文件为版本8  服务器版本为9   需要更新解决问题
+      #svn update  此时会把 pc12修改的与自己的进行合并
+      #svn ci -m "xx"
+      #版本10            此时 pc12差一个更新
+3.修改相同文件，相同行
+[pc12]#sed -i "1c [UNIT]" tuned.serve 
+      #svn ci -m "xx"
+      #版本11
+[pc13]#sed -i "1c [unit]" tuned.serve
+      #svn ci -m "xx"  因为自己手里版本为10 此时服务器版本为11 提示过期
+      #svn update     提示发生冲突 提供选项 p推迟  df显示全部差异 e编辑 mc选择我的版本 tc选择他人的版本 s显示全部选项
+      此时会出现四个文件
+ tuned.service    tuned.service.mine          tuned.service.r9             tuned.service.11
+ 冲突对比文件       自己修改的文件         两人都不对使用更早的版本           他人的版本
+
+恢复：加入自己的是对的  
+除了自己的文件（tuned.service.mine）其他删除  mv tuned.service.mine tuned.service
+[pc13]#svn ci -m "xx"
+    提交成功  版本变12      

@@ -1,0 +1,41 @@
+客服端lnmp  服务端yum  都增添一个网卡这两张网卡配置一个网段
+
+下方位客户端操作
+iscsiadm --mode discoverydb --type sendtargets --portal 192.168.43.10 --discover
+
+iscsiadm --mode discoverydb --type sendtargets --portal 192.168.181.129 --discover  两次发现
+
+systemctl restart iscsi  重启后会多一块 20G硬盘
+
+
+yum -y install device-mapper-multipath* 默认没有配置文件
+cd /usr/share/doc/device-mapper-multipath-0.4.9 进入配置文件模板目录
+cp multipath.conf /etc/multipath.conf  复制配置文件模板到 /etc
+
+/usr/lib/udev/scsi_id --whitelisted --device=/dev/sdb 查询两个硬盘的wwid是一样的
+/usr/lib/udev/scsi_id --whitelisted --device=/dev/sdc
+
+vim /etc/multipath.conf
+defaults {                         
+        user_friendly_names yes   要不要自动发现多路径 
+        find_multipaths yes       要不要给多路径取一个方便阅读的名字
+} 
+
+multipaths {
+        multipath {
+                wwid                    36001405fbe2f31b59954deb9dee9fa6e  前边查到的wwid复制到这里
+                alias                   mpatha                             取名字
+ }
+}
+systemctl start multipathd  启动multipathd
+ls /dev/mapper/          查看是否生效
+control  mpatha  mpatha1 出现映射
+mount /dev/mapper/mpatha1 /mnt/  挂载
+multipath -ll                   查看multipath状态
+mpatha (36001405fbe2f31b59954deb9dee9fa6e) dm-0 LIO-ORG ,store  #iscsi wwid          
+size=20G features='0' hwhandler='0' wp=rw            硬盘大小
+|-+- policy='service-time 0' prio=1 status=active   
+| `- 3:0:0:0 sdb 8:16 active ready running             服务组件sdb 状态running 
+`-+- policy='service-time 0' prio=1 status=enabled
+  `- 4:0:0:0 sdc 8:32 active ready running             服务组件sdc 状态running
+可以关掉一个网卡在看看multipath状态

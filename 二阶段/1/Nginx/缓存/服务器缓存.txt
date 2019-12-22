@@ -1,0 +1,5 @@
+ http {
+    open_file_cache max=2000 inactive=20s;    设置服务器最大缓存2000个文件,从硬盘放进内存后20秒没人访问就拿出
+    open_file_cache_valid 60s ;               文件有效时间是60秒 60秒后过期拿出来
+    open_file_cache_min_user 5;               只有访问次数超过5次会被缓存
+    open_file_cache_errors off;               缓存报错不用报错 因为有可能用户访问时候 刚好过期

@@ -1,0 +1,26 @@
+ 复习分区
+
+  parted /dev/sdb mklabel gpt
+
+  parted /dev/sdb mkpart primary 1 100%
+
+  targetcli
+
+   backstores/block create   store      /dev/sdb1
+   固定格式         创建   为设备起名   共享那个
+
+   iscsi create  create iqn.2018-11.cn.tedu:server1
+   创建共享iqn  create    iqn名字         反向域名  ：随便写
+
+   iscsi/iqn.2018-11.cn.tedu:server1/tpg1/acls create iqn.2018-11.cn.tedu:client1
+   创建acl
+
+   iscsi/iqn.2018-11.cn.tedu:server1/tpg1/luns create /backstores/block/store
+   绑定后端存储
+   
+   iscsi/iqn.2018-11.cn.tedu:server1/tpg1/portals/0.0.0.0:3260
+   绑定地址与端口可以不用打默认
+
+   saveconfig
+   保存
+   systemctl start target

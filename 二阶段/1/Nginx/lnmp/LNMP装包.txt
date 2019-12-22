@@ -1,0 +1,10 @@
+装包
+nginx:
+      nginx
+
+mysql:
+      mariadb(数据库客服端软件) mariadb-server*（数据库服务端软件） mariadb-devel（其他客服端软件的依赖包）
+
+php  :
+      php（解释器） php-fpm（进程管理器服务） php-mysql（php的数据库扩展包）
+

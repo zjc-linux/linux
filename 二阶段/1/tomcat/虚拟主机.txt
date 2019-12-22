@@ -1,0 +1,10 @@
+ <Host name="localhost"  appBase="webapps"               localhost：域名  webapps  网站位置 /usr/local/tomcat/webapps
+            unpackWARs="true" autoDeploy="true">
+          <Context path="" docBase="base" reloadable="true"/> 默认网页放在ROOT  可以修改为base 
+
+   ###### <Context path="/test" docBase=/var/www/html reloadable="true"/>  如果访问test 直接跳转到/var/www/html
+ 
+  </Host>
+
+
+  

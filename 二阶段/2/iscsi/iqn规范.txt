@@ -1,0 +1,5 @@
+  iqn.时间.反转域名.string:string
+                    用来干什么：用哪个磁盘做vdc
+
+    
+  

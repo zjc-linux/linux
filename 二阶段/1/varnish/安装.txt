@@ -1,0 +1,16 @@
+varnish=squid  两个软件都是做缓存服务器的
+    yum -y install gcc readline-devel
+    yum -y install ncurses-devel
+    yum -y install pcre-devel
+
+    最后需要一个Python包 光盘里没有 yum -y install python-docutils-0.11-0.2.20130715svn7687.el7.noarch.rpm
+    useradd -s /sbin/nologin varnish
+    tar -xf varnish-5.2.1.tar.gz
+    cd /varnishi-5.2.1
+    ./configure 
+    make && make install
+
+
+   
+     
+ 

@@ -1,0 +1,12 @@
+ mv /usr/local/etc//default.vcl /usr/local/etc/default.vcl mv /usr/local/etc//default.val /usr/local/etc/default.vcl
+  配置文件的模板
+
+ vim /usr/local/etc/default.vcl
+
+ 找到 backend default {
+          host = "192.168.43.12";      请问你要缓存那台服务器
+          port = "80";      服务器的短空是
+}
+  启服务
+          
+  varnishd -f /usr/local/etc/default.vcl      缓存服务器会占用80端口   需要查看80端口是否被占用

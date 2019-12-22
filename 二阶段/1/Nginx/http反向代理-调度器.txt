@@ -1,0 +1,29 @@
+upstream webs {                         主要是创建webs群 和在location 中调用webs 实现轮询效果
+   server 192.168.43.12:80;
+   server 192.168.43.13:80;
+  }
+
+  server {
+  ...
+  ...
+}
+  location / {
+  proxy_pass http://webs;
+  ...
+  ...
+}
+
+
+
+
+
+upstream webserver{
+     server 192.168.43.12  weight=1 max_fail=1 fail_timeout=20;
+     server 192.168.43.13  weight=2 max_fail=2 fail_timeout=20;
+     server 192.168.43.10  down;
+}
+
+
+weight=1   权重
+max_fail=1   相当于ping几次不同认为你挂掉
+fial_timeout=20  挂掉之后多久不在对你进行测试

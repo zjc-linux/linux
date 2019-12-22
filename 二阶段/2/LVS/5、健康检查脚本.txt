@@ -1,0 +1,27 @@
+ LVS不带健康检查需要自己写脚本
+ curl -s http://192.168.43.12 >/dev/null  -s 是安静的意思 不要输出参数
+ curl http://192.168.43.12 &>/dev/null     两种方式都可以
+--------------------------------------------------------------------------------------
+#!/bin/bash
+vip=192.168.43.15:80
+web1=192.168.43.12
+web2=192.168.43.13
+
+while :
+do
+wleep 3
+for i in $web1 $web2     
+do  
+  curl http://$i &>/dev/null     测试$i 是否能访问  把输出结果扔进黑洞
+  if[ $? -ne 0 ];then            判断 上一行运行结果
+    ipvsadm -Ln | grep -q $i  &&  ipvsadm -d -t $vip -r $i 查询集群是否有$i 有的话删除
+  fi                            grep -q 避免输出信息
+done
+dor i in 192.168.43.12 192.168.43.13 
+do
+   curl http://$i &> /dev/null 测试$i
+   if [ $? -eq 0 ];then    判断运行结果
+   ipvsadm -Ln | grep -q $i || ipvsadm -a -t 192.168.43.15:80 -r $i -g
+   fi
+done
+done

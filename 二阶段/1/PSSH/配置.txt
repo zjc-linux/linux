@@ -1,0 +1,29 @@
+  修改hosts               目的是为了更方便 不要在输IP可以直接使用域名
+  vim /etc/hosts
+  192.168.0.12 lnmp
+  192.168.0.13 iptables
+  
+  创建主机列表文件
+   vim /etc/root/host.txt
+  # root@host1  可以使用用户加主机名   不写用户默认root
+  lnmp
+  iptables
+
+man pssh
+-A       使用密码远程其他主机(默认使用秘钥)      
+-i       将输出显示在屏幕
+-H       设置需要连接的主机
+-h       设置主机列表文件
+-p       设置并发数量
+-t       设置超时时间
+-o dir   设置标准输出信息保存的目录
+-e dir   设置村务输出信息保存的目录
+-x       传递参数给ssh
+  什么参数不加默认秘钥
+
+pssh -i -A -H 'lnmp iptables' -x "-o StrictHostKeyChecking=no" echo hello
+ 
+ 解释：-i 把执行结果显示到pssh机器
+       -A 使用密码远程 不加参数默认秘钥
+       -H 设置需要连接的主机 ‘lnmp iptables’多个主机需要引起来保持一个整体
+       -x pssh底层使用ssh 这个选项可以把参数传递 可以不再输yes no 

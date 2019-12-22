@@ -1,0 +1,94 @@
+ 根据1配置秘钥在node1上 所以在node1上部署
+[root@node1]# yum -y install ceph-deploy -----------安装ceph部署脚本软件
+                 ceph-deploy --help 可以查看帮助
+
+[root@node1]# mkdir ceph-cluster  -----创建叫什么都可以
+[root@node1]# cd  ceph-cluster
+[root@node1 ceph-cluster]# ceph-deploy new node1 node2 node3 ---新建集群由node1、2、3组成 生成配置文件
+[root@node1 ceph-cluster]# ceph-deploy install node1 node2 node3 为节点安装软件
+ ###### yum -y install ceph-common.x86_64 ceph-osd ceph-radosgw ceph-mon ceph-mds
+ ###### ceph-base.x86_64                        1:10.2.2-38.el7cp              @MON     
+        ceph-common.x86_64                      1:10.2.2-38.el7cp              @MON     
+        ceph-deploy.noarch                      1.5.33-1.el7cp                 @Tools   
+        ceph-mds.x86_64                         1:10.2.2-38.el7cp              @Tools   
+        ceph-mon.x86_64                         1:10.2.2-38.el7cp              @MON     
+        ceph-osd.x86_64                         1:10.2.2-38.el7cp              @OSD     
+        ceph-radosgw.x86_64                     1:10.2.2-38.el7cp              @Tools   
+        ceph-selinux.x86_64                     1:10.2.2-38.el7cp              @MON     
+        libcephfs1.x86_64                       1:10.2.2-38.el7cp              @MON     
+        python-cephfs.x86_64                    1:10.2.2-38.el7cp              @MON     
+        ceph-fuse.x86_64                        1:10.2.2-38.el7cp              Tools    
+        ceph-test.x86_64                        1:10.2.2-38.el7cp              MON      
+        libcephfs1-devel.x86_64                 1:10.2.2-38.el7cp              MON  
+
+初始化所有节点的mon服务(mon个数必须为3 5 7 这样得奇数个 因为投票机制)
+##[root@node1 ceph-cluster]# ceph-deploy mon create-initial -------为mon节点分发配置文件
+##[root@node1 ceph-cluster]# ls /etc/ceph
+                          ## ceph.client.admin.keyring(ceph用户名和密码)  ceph.conf  rbdmap  tmphEJWGZ
+##[root@node1 ceph-cluster]# systemctl status ceph-mon@node1 ---查看服务 node1 2 3都可以看
+##[root@node1 ceph-cluster]# ceph -s -----查看ceph状态
+     sdb1----sdc   假设sdb为固态盘 做两个分区 为sdc sdd的缓存盘 可以获得固态盘的速度 又有机械盘的大储存空间
+     sdb2----sdd
+##[root@node1]# parted /dev/sdb mklabel gpt
+##[root@node1]# parted /dev/sdb mkpart primary 1M 50%
+##[root@node1]# parted /dev/sdb mkpart primary  50% 100%
+##[root@node1]# chown  ceph.ceph /dev/sdb1
+##[root@node1]# chown  ceph.ceph /dev/sdb2                        node1 2 3 都这样做
+##[root@node1]# ceph-deploy disk zap node1:sdc node1:sdd  -----|
+##[root@node1]# ceph-deploy disk zap node2:sdc node2:sdd  -----|----初始化清空磁盘数据
+##[root@node1]# ceph-deploy disk zap node3:sdc node3:sdd  -----|
+
+[root@node1 ~]# ceph-deploy osd create node1:sdc:/dev/sdb1 node1:sdd:/dev/sdb2
+[root@node1 ~]# ceph-deploy osd create node2:sdc:/dev/sdb1 node1:sdd:/dev/sdb2
+[root@node1 ~]# ceph-deploy osd create node3:sdc:/dev/sdb1 node1:sdd:/dev/sdb2
+                                创建   主机 磁盘   缓存盘   --------需要在 /root/ceph-cluster目录打命令
+[root@node1 ] # ceph -s 查看状态
+[root@node1] # ceph osd lspools   --查看共享池
+0 rbd,   默认有一个共享池 rbd
+[root@node1] # rbd create     demo-image      --image-feature layering --size 10G
+           rbd池子  创建   块存储(默认在rbd)   功能            支持快照
+[root@node1] # rbd create rbd/image         --image-feature layering --size 10G
+[root@node1] #rbd ls  查看做的磁盘
+demo-image
+image
+[root@node1] #rbd info image  查看rbd池子下image磁盘详细信息
+获得
+[root@node1] #rbd resize --size 7G image --allow-shrink   -----缩小常见磁盘的大小
+[root@node1] #rbd info image
+
+[root@node1] #rbd resize --size 15G image     -----扩容到15G
+[root@node1] #rbd info image 
+
+集群映射
+[root@node1] #rbd map demo-image    ---------------node1节点为客户端 可以直接映射
+/dev/rbd0
+[root@node1] #lsblk 
+rbd0  251:0   0   10G 0 disk
+ 
+[root@client] # yum -y install ceph-common  ---------------使用客服机访问 此时/etc/ceph 没有集群配置文件
+[root@node1] # scp /etc/ceph/ceph.client.admin.keyring ceph.conf client:/etc/ceph
+                                获得集群权限          获得集群位置  
+[root@client] #rbd map demo-image    ---------------- client为客户端  
+/dev/rbd0  --------------  映射磁盘  可以进行挂载使用
+
+[root@client ~]# mkfs.xfs /dev/rbd0        格式化
+[root@client ~]# mount /dev/rbd0 /mnt      挂载使用
+[root@client mnt]# echo 123 > a.txt    随便写个文件
+
+创建与使用快照 -----------------------------------------------------需要在node节点
+[root@node1]# rbd snap ls demo-image    查询这个共享盘是否有快照
+     创建快照时候可以先把client上的挂载卸载掉 因为有可能这个时候客户还在写数据 数据这个时候可能还在缓存 快照不到
+[root@node1 ~]# rbd snap create demo-image --snap demo-image-snap1
+                                对那个块设备          随便自己起
+[root@client ] # rm -rf /mnt/a.txt  删除文件
+[root@node1 ~]# rbd snap rollback demo-image --snap demo-image-snap1   --在node1节点用刚做的快照回滚
+[root@client ~]# mount /dev/rbd0 /mnt/
+[root@client ~]# ls /mnt/
+a.txt                   ----------------------还原
+
+
+
+
+
+           
+
