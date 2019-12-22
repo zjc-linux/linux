@@ -1,0 +1,12 @@
+<network>
+  <name>vbr1</name>                写什么用virsh  net-list 查到的就是什么
+  <forward mode='nat'/>              支持网络地址伪装
+  <bridge name='vbr1' stp='on' delay='0'/>    name="ifconfig查看到的网卡名"交换机属性设置  开启生成树协议
+  <ip address='192.168.43.254' netmask='255.255.255.0'>    设置默认路由的地址
+    <dhcp>         可以使用dhcp配置ip 
+      <range start='192.168.43.100' end='192.168.43.200'/>  dhcp开始与结束范围
+    </dhcp>       
+   </ip>
+</network>
+
+[root@room ~]# cp vbr.xml  /etc/libvirt/qemu/networks/

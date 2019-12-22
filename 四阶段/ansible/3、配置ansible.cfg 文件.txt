@@ -1,0 +1,18 @@
+vim  /etc/ansible/ansible.cfg 
+ #inventory      = /etc/ansible/hosts     去注释 指定主机分组文件
+#host_key_checking = False      去掉注释   模块ping不需要输入yes
+
+vim  /etc/ansible/hosts 
+[web]      #组名
+web1       组下的主机
+web2       组下的主机
+
+[db]
+mysql1  ansible_ssh_pass="a"   自定义密码
+mysql2  ansible_ssh_pass="b"
+
+[zabbix]
+zabbix
+
+[samba]
+samba

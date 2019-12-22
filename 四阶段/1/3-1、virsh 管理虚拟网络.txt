@@ -1,0 +1,8 @@
+virsh   
+           net-list                      查看虚拟网络
+           net-define  vbr.xml    创建虚拟网络      在vbr.xml 的目录下执行否则需要写绝对路径
+           net-undefine vbr       删除虚拟网络
+           net-start  vbr             启动虚拟网络
+           net-destroy               停止虚拟网络
+           net-edit vbr               修改vbr网络的配置
+           net-autostart vbr       设置vbr虚拟网络开机自启

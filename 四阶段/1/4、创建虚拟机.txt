@@ -1,0 +1,12 @@
+配置网络yum源
+修改配置文件  /etc/vsftpd/vsftpd.conf
+listen=YES
+listen_ipv6=NO
+systemctl enable vsftpd
+systemctl start vsftpd
+
+
+
+[root@room ~]# qemu-img create -f qcow2 /var/lib/libvirt/images/node.img   2G   生成后端存储
+
+网络安装 -》 url://yum源地址 -》cpu 内存 -》选择创建自定义存储 node.img -》网络选择vbr -》开始安装

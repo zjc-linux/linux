@@ -1,0 +1,20 @@
+ansible  主机或分组   参数    模块名称  模块的参数
+
+ ansible    web   --list-hosts    显示组下的所有主机
+
+[root@room ansible]# ansible web,db --list-hosts    显示db组与web组的主机
+
+[root@room ansible]# ansible all --list-hosts  显示所有组的所有主机
+
+[root@room ansible]# ansible web -m ping -k
+                                                         ping web组主机     -k 交互式输入密码
+
+[root@room ~]# ansible all -m command -a 'uptime' -k                                     
+                                        所有     默认模块      显示当前时间   -k 交互密码    command不能执行bash
+
+[root@room ~]# ansible all  -m   shell    -a 'ps -ef | grep sshd'    
+
+[root@room ~]# ansible all -m shell -a 'chdir=/tmp pwd'
+                                                    
+
+

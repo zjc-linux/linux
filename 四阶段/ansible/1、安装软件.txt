@@ -1,0 +1,1 @@
+为ansible下的包做yum源  安装这几个rpm包

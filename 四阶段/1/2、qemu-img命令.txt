@@ -1,0 +1,17 @@
+qemu-img 命令格式
+qemu-img   命令    参数     块文件名称    大小
+   create        创建一个磁盘   
+   convert      转换磁盘格式
+   info            查看磁盘信息
+   snapshot    管理磁盘快照
+
+                           qemu-img create -f 格式     磁盘路径  大小
+[root@room ~]# qemu-img create -f qcow2 disk.img 50G
+
+查询镜像盘文件的信息
+                           qemu-img info 磁盘路径
+[root@room ~]# qemu-img info disk.img
+
+-b  使用后端模板文件
+[root@room ~]# qemu-img create -b disk.img -f qcow2 disk.img
+

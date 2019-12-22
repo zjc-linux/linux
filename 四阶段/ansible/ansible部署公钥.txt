@@ -1,0 +1,6 @@
+[root@room ~]# ssh-keygen -f /root/.ssh/id_rsa -N ''  生成私钥 
+
+[root@room ~]# ansible all -m authorized_key -a "user=root exclusive=true manage_dir=true 
+                                                公钥分发模块    -a  连接远程用户   覆盖以前公钥     没有/root/.ssh 的话创建一下
+key='$(< /root/.ssh/id_rsa.pub)'"   -k
+把 /root/.ssh下的公钥赋值给key变量   -k 交互输入密码

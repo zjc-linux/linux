@@ -1,0 +1,31 @@
+yum 客户端
+baseurl  配置的地址路径是 repodate 的路径
+
+配置 chronyd 把时间同步指向 ntp.aliyun.com
+chronyc sources 可以查询时间同步 是否成功
+-----------------------------------------------------------------------
+安装虚拟化平台
+必备软件
+[root@room ~]# yum -y install virt-manager  VM图形化工具
+
+qemu-kvm                               #为kvm提供底层仿真支持
+
+libvirt-daemon                         # libvirtd守护进程  管理虚拟机
+
+libvirt-client                             #用户端软件 提供客户端管理命令
+
+libvirt-daemon-driver-qemu    #libvirtd 连接qemu的驱动
+
+virsh  命令
+[root@room ~]# virsh nodeinfo  查看kvm服务器信息
+[root@room ~]# virsh list            查看开机的的虚拟机
+[root@room ~]# virsh list   --all   查看所有虚拟机包括 关机状态的
+[root@room ~]# virsh start node1           启动一台虚拟机
+[root@room ~]# virsh shutdown node1   关闭一台虚拟机
+[root@room ~]# virsh restart node1        重启一台虚拟机
+[root@room ~]# virsh destroy node1       拔出一台虚拟机的电源
+[root@room ~]# virsh net-list           列出虚拟交换机   可以加  --all
+[root@room ~]# virsh dominfo node1    查看指定虚拟机信息
+[root@room ~]# virsh autostart node1  将指定虚拟机设置为开机启动
+
+

@@ -1,0 +1,5 @@
+首先检测ansible_config 变量的配置文件
+其次检测当前目录下的  ./ansible.cfg文件
+再检测当前用户家目录下 ~/ansible.cfg 文件
+最后检查  /etc/ansible/ansible.cfg 文件
+/etc/ansible/ansible.cfg 是ansible的默认配置文件路径

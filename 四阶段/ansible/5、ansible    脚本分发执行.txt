@@ -1,0 +1,14 @@
+[root@room ~]# cat auser.sh                     复杂的需要预先写脚本
+#!/bin/bash 
+if ! $(id z3 &>/dev/null);then  
+    useradd li4       
+    echo 'aa' | passwd --stdin li4  
+fi
+
+
+
+[root@room ~]# ansible web       -m   script       -a          'auser.sh'              
+                                        组或用户    使用script模块执行   -a      脚本本地名(在当前位置)  
+
+[root@room ~]# ansible all -m shell -a 'id li4'    shell模块查看用户是否存在
+

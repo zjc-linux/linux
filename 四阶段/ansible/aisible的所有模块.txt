@@ -1,0 +1,3 @@
+[root@room ~]# ansible-doc-l | wc -l
+
+[root@room ~]# ansible-doc ping  模块使用方法
