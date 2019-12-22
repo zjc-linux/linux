@@ -1,0 +1,2 @@
+[root@node1]# ssh-keygen -f /root/.ssh/id_rsa   -N ''
+                         指定存放位置于秘钥名   -N 为秘钥的密码为空      如果已经有秘钥会询问是否需要覆盖

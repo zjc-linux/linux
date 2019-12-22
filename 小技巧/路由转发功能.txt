@@ -1,0 +1,11 @@
+  echo 1> /proc/sys/net/ipv4/ip_forward   临时规则
+
+  echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf  --永久规则
+
+
+ vim /etc/sysctl.conf
+ #手写如下四行内容
+ net.ipv4.conf.all.arp_ignore = 1  如果别人给我arp包 那么我忽略
+ net.ipv4.conf.lo.arp_ignore = 1   如果别人给我arp包 那么我忽略
+ net.ipv4.conf.lo.arp_announce = 2  
+ net.ipv4.conf.all.arp_announce = 2
