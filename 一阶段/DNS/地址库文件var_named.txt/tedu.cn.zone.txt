@@ -1,0 +1,10 @@
+$TTL 1D
+@       IN SOA  @ rname.invalid. (
+                                        0       ; serial
+                                        1D      ; refresh
+                                        1H      ; retry
+                                        1W      ; expire
+                                        3H )    ; minimum
+tedu.cn.                NS      iptables.tedu.cn.     这个域名    被那个用户服务器管理
+iptables.tedu.cn.       A       192.168.43.13         域名对应的   IPV4   地址
+www.tedu.cn.            AAAA    1.1.1.1

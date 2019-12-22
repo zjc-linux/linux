@@ -1,0 +1,22 @@
+服务端 下载 nfs-utils软件包
+mkdir /test  创建共享文件夹
+chmod o+w  赋予用户写权限 
+写入配置文件 vim /etc/exports
+/test  ip地址/24(rw(权限),no_root_squash)
+文件夹路径   客户机地址(权限)  客户机地址权限(权限)     权限可以为ro,rw     
+/public         192.168.43.10(ro)
+/ceshi           *(rw)
+
+systemctl start nfs-server
+
+
+
+客服端   showmount(需要可以下载这个软件包)
+showmount -e 192.168.43.10 
+/test 192.168.43.10/24
+
+写入配置文件开机挂载
+vim /etc/fstab
+ip:/共享文件名  挂载位置   参数nfs,_netdev 0 0
+192.168.43.10:/test /mnt/a nfs,_netdev 0 0 
+  

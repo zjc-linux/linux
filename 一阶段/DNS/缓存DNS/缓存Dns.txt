@@ -1,0 +1,7 @@
+1、装包 bind-chroot bind
+2、复制一份主配置文件作为备份防止出现错误无法挽回 cp /etc/named.conf /root
+3、修改主配置文件 vim /etc/named.conf
+  options {
+        directory       "/var/named";
+        forwarders  { 127.127.127.127; };    公网DNS服务器IP
+};

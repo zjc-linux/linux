@@ -1,0 +1,2 @@
+放入后台 /root/rsync.sh &    运行时候加&符号就会放入后台运行
+杀死进程  kallall rsync.sh  

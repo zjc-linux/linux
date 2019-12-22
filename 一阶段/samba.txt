@@ -1,0 +1,11 @@
+1、服务端安装SAMBA
+2、创建用户  pdbedit -a 加入进samba里   -x可以删除用户  -L可以查看所有用户
+3、为用户配置权限  假设共享文件名为common  setfacl -m u:用户:rwx /common 
+4、配置selinux  可以进入/etc/selinux/config/ 彻底关闭  setsebool -a (显示所有) | grep samba ro rw 打开
+5、配置防火墙  设置为trusted
+6、修改SAMBA配置文件/etc/samba/smb.conf 
+ 设置工作组
+ [工作名]
+         path = 共享目录绝对路径
+         write list = 用户名   在配置文件里给与用户写权限
+         hosts allow = 允许该IP通过授权用户访问common

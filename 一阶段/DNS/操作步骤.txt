@@ -1,0 +1,17 @@
+1.修改地址库文件 /etc/named.conf
+    zone "qq.com" IN {
+       type master;
+       file  "qq.com.zone";
+  };
+
+2.建立地址库文件
+  cd  /var/named
+  cp -p tedu.cn.zone qq.com.zone 
+  ls -ls qq.com.zone
+ 
+vim  qq.com.zone
+  qq.com.   NS   aa
+  aa        A    192.168.43.13
+  www       AAAA  ::1
+
+3.重启named 服务

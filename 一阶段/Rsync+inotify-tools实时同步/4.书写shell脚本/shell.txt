@@ -1,0 +1,13 @@
+#！/bin/bash
+while 命令     可以跟命令执行成功返回值为0就会运行 都do done  
+do
+done
+
+
+
+
+#!/bin/bash
+while inotifywait -rq /opt     不要加m选项不然不会有返回值无法执行do done -rqq选项可以让屏幕不输出信息
+do
+rsync -avz --delete /opt/ root@192.168.43.13:/opt    -v选项会出现输出信息 使用-az选项就没有输出信息
+done

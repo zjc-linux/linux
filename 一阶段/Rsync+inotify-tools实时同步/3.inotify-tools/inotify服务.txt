@@ -1,0 +1,10 @@
+1、源码安装inotify
+2、只需gcc就可以
+3、./configure 不需要指定位置 然后 make   make install  安装完成
+
+inotifywait
+ -m 持续监控（默认捕捉一个后退出）
+ -r 递归监控
+ -q 减少屏幕输出
+ -e 指定监控 modify move create delete attrib(属性改变)
+ 例子 inotifywait -mrq /opt
